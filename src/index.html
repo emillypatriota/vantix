@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>VOLTZ — Tech Store</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .app-loading {
+      position:fixed;inset:0;background:#070d1c;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;
+      font-family:'Inter',sans-serif;
+    }
+    .app-loading-logo {
+      width:52px;height:52px;border-radius:14px;
+      background:linear-gradient(135deg,#1d5bd6,#173d8c);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem;font-weight:800;color:#fff;font-family:Sora,Inter,sans-serif;
+    }
+    .app-loading-spinner {
+      width:28px;height:28px;border-radius:50%;
+      border:2.5px solid rgba(58,111,240,.2);
+      border-top-color:#3a6ff0;
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg) } }
+  </style>
+</head>
+<body>
+  <app-root>
+    <div class="app-loading">
+      <div class="app-loading-logo">V</div>
+      <div class="app-loading-spinner"></div>
+    </div>
+  </app-root>
+</body>
+</html>
