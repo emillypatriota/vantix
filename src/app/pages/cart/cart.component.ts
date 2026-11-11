@@ -3,13 +3,14 @@ import { RouterLink } from '@angular/router';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { CartService, shippingFor, SHIPPING_FEE, FREE_SHIPPING_MIN } from '../../services/cart.service';
 import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive';
+import { AlsoBoughtComponent } from '../../components/ui/also-bought.component';
 import { CartItem } from '../../models';
 import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [RouterLink, AsyncPipe, NgFor, NgIf, ImgFallbackDirective],
+  imports: [RouterLink, AsyncPipe, NgFor, NgIf, ImgFallbackDirective, AlsoBoughtComponent],
   template: `
     <div style="padding:2.5rem 0 4rem;background:var(--stone-50);min-height:60vh">
       <div class="container">
@@ -48,6 +49,10 @@ import { combineLatest, map } from 'rxjs';
                 </div>
               </div>
               <a routerLink="/produtos" class="btn btn-outline" style="margin-top:.5rem">+ Adicionar mais itens</a>
+
+              <app-also-bought *ngIf="(items$ | async) as items"
+                               [productIds]="idsOf(items)"
+                               title="Quem comprou estes produtos também levou"></app-also-bought>
             </div>
 
             <div style="position:sticky;top:5.5rem">
@@ -108,7 +113,7 @@ import { combineLatest, map } from 'rxjs';
       </div>
     </div>
   `,
-  styles: [`@media(max-width:900px){.cart-grid{grid-template-columns:1fr !important}}`]
+  styles: [`@media(max-width:900px){.cart-grid{grid-template-columns:minmax(0,1fr) !important}}`]
 })
 export class CartComponent {
   brl(v: number) { return (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
@@ -122,4 +127,5 @@ export class CartComponent {
   constructor(private cart: CartService) {}
   updateQty(item: CartItem, qty: number) { this.cart.updateQuantity(item.id, qty); }
   remove(id: string) { this.cart.removeItem(id); }
+  idsOf(items: CartItem[]) { return items.map(i => i.id); }
 }

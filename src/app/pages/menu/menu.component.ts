@@ -1,11 +1,12 @@
 import { Component, signal, computed } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MenuService, CATEGORIES } from '../../services/menu.service';
+import { MenuService } from '../../services/menu.service';
 import { CartService } from '../../services/cart.service';
 import { ToastService } from '../../services/toast.service';
 import { MenuItem } from '../../models';
 import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive';
+import { AlsoBoughtComponent } from '../../components/ui/also-bought.component';
 
 const ALL = 'Todos';
 const CAT_ICONS: Record<string, string> = {
@@ -16,13 +17,14 @@ const CAT_ICONS: Record<string, string> = {
   'Notebooks': '💻',
   'Smartphones': '📱',
   'Games': '🎮',
+  'Áudio': '🎧',
 };
 const MAX_INSTALLMENTS = 10;
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [NgFor, NgIf, RouterLink, ImgFallbackDirective],
+  imports: [NgFor, NgIf, RouterLink, ImgFallbackDirective, AlsoBoughtComponent],
   template: `
     <!-- Hero do catálogo -->
     <div style="background:linear-gradient(160deg,#070d1c 0%,#0b1b3f 60%,#173d8c 100%);padding:3.5rem 0 0;position:relative;overflow:hidden">
@@ -112,6 +114,14 @@ const MAX_INSTALLMENTS = 10;
           </div>
           <p style="color:var(--stone-400);font-size:.85rem">{{ displayItems().length }} {{ displayItems().length===1?'produto':'produtos' }}</p>
         </div>
+
+        <!-- Quem comprou também levou (aparece depois de adicionar um produto) -->
+        <app-also-bought *ngIf="lastAdded() as last"
+                         [productIds]="[last.id]"
+                         [title]="'Quem comprou ' + last.name + ' também levou'">
+          <button (click)="lastAdded.set(null)" aria-label="Fechar recomendações"
+                  style="color:var(--stone-400);font-size:1.25rem;line-height:1;background:none;border:none;cursor:pointer">×</button>
+        </app-also-bought>
 
         <!-- Empty state -->
         <div *ngIf="displayItems().length===0" style="text-align:center;padding:4rem 2rem;background:#fff;border-radius:var(--r-2xl);border:1px solid var(--stone-100)">
@@ -207,7 +217,8 @@ const MAX_INSTALLMENTS = 10;
   `]
 })
 export class MenuComponent {
-  categories = [ALL, ...CATEGORIES];
+  get categories() { return [ALL, ...this.menuService.getCategories()]; }
+  lastAdded = signal<MenuItem | null>(null);
   selectedCategory = signal(ALL);
   maxInstallments = MAX_INSTALLMENTS;
   search = signal('');
@@ -252,6 +263,7 @@ export class MenuComponent {
 
   addToCart(item: MenuItem) {
     this.cart.addItem(item);
+    this.lastAdded.set(item);
     this.toast.show(`${item.name} adicionado! 🛒`);
   }
   increase(item: MenuItem) { this.cart.addItem(item); }

@@ -1,10 +1,11 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { NgFor, NgIf, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuService, CATEGORIES } from '../../../services/menu.service';
 import { ImgFallbackDirective } from '../../../components/ui/img-fallback.directive';
 import { ToastService } from '../../../services/toast.service';
 import { MenuItem } from '../../../models';
+import { apiErrorMessage } from '../../../core/api/auth.interceptor';
 
 interface MenuForm {
   name: string;
@@ -313,7 +314,7 @@ const EMPTY_FORM: MenuForm = {
     @keyframes spin { to { transform:rotate(360deg); } }
   `]
 })
-export class MenuManagementComponent {
+export class MenuManagementComponent implements OnInit {
   // Totalmente reativo: lê diretamente dos signals do service — zero polling, zero memory leak
   readonly allItems = computed(() => this.menuService.items$());
   readonly loading  = computed(() => !this.menuService.loaded$());
@@ -329,12 +330,15 @@ export class MenuManagementComponent {
   formError = '';
 
   form: MenuForm = { ...EMPTY_FORM };
-  categories = CATEGORIES;
+  get categories() { return this.menuService.getCategories(); }
 
   constructor(
     private menuService: MenuService,
     private toast: ToastService
   ) {}
+
+  // O gerente vê também os produtos desativados.
+  ngOnInit() { this.menuService.reload(true); }
 
   filteredItems = computed(() => {
     let items = this.menuService.items$();
@@ -414,7 +418,6 @@ export class MenuManagementComponent {
       image:       this.form.image.trim(),
       isSpecial:   this.form.isSpecial,
       brand:       this.form.brand.trim(),
-      // Firestore rejeita campos undefined: só envia o que foi preenchido
       ...(this.form.oldPrice ? { oldPrice: Number(this.form.oldPrice) } : {}),
       ...(this.form.stock !== null && this.form.stock !== undefined && String(this.form.stock) !== '' ? { stock: Number(this.form.stock) } : {}),
     };
@@ -428,8 +431,8 @@ export class MenuManagementComponent {
         this.toast.show('Produto cadastrado!');
       }
       this.closeModal();
-    } catch {
-      this.formError = 'Erro ao salvar. Verifique a conexão e tente novamente.';
+    } catch (err) {
+      this.formError = apiErrorMessage(err, 'Erro ao salvar. Verifique a conexão e tente novamente.');
     } finally {
       this.saving.set(false);
     }
@@ -437,8 +440,10 @@ export class MenuManagementComponent {
 
   async toggleActive(item: MenuItem) {
     const newActive = item.active === false ? true : false;
-    await this.menuService.toggleItem(item.id, newActive);
-    this.toast.show(newActive ? `"${item.name}" ativado` : `"${item.name}" pausado`);
+    try {
+      await this.menuService.toggleItem(item.id, newActive);
+      this.toast.show(newActive ? `"${item.name}" ativado` : `"${item.name}" desativado`);
+    } catch (err) { this.toast.show(apiErrorMessage(err, 'Não foi possível alterar o produto.'), 'error'); }
   }
 
   confirmDelete(item: MenuItem) {
@@ -448,8 +453,10 @@ export class MenuManagementComponent {
   async deleteItem() {
     const target = this.deleteTarget();
     if (!target) return;
-    await this.menuService.deleteItem(target.id);
-    this.toast.show(`"${target.name}" removido do catálogo`);
+    try {
+      await this.menuService.deleteItem(target.id);
+      this.toast.show(`"${target.name}" removido do catálogo`);
+    } catch (err) { this.toast.show(apiErrorMessage(err, 'Não foi possível remover o produto.'), 'error'); }
     this.deleteTarget.set(null);
   }
 }

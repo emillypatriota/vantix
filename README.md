@@ -1,4 +1,4 @@
-# VOLTZ Tech Store — Angular 17 + Firebase
+# VOLTZ Tech Store — Angular 17 + Java (Spring Boot) + MySQL
 
 Loja virtual de tecnologia (hardware, periféricos, notebooks, smartphones e games),
 derivada do projeto acadêmico **Maka Delivery**. O design system e a arquitetura
@@ -11,7 +11,20 @@ npm install
 npm start
 ```
 
-Acesse: http://localhost:4200 — antes, configure o Firebase (veja `FIREBASE_SETUP.md`).
+Acesse: http://localhost:4200
+
+### Com ou sem a API Java
+
+Em `src/environments/environment.ts`:
+
+| `useMock` | O que acontece |
+|---|---|
+| `true` (padrão) | O Angular usa um **back-end falso** em memória, com os mesmos dados do `database/02_dados.sql`. Dá para testar tudo sem o Java. |
+| `false` | O Angular chama a API Java em `apiUrl` (`http://localhost:8080/api`). |
+
+- O formato de cada rota está em **[docs/API_CONTRATO.md](docs/API_CONTRATO.md)**.
+- Os dados do mock ficam salvos no navegador. Para zerar, rode `voltzMockReset()` no console (F12).
+- Se o `02_dados.sql` mudar, gere o mock de novo com `node scripts/sql-to-mock.mjs`.
 
 ## Credenciais de acesso (demo)
 
@@ -48,7 +61,8 @@ Acesse: http://localhost:4200 — antes, configure o Firebase (veja `FIREBASE_SE
 | O quê                          | Arquivo                                              |
 |--------------------------------|------------------------------------------------------|
 | Paleta, fontes, sombras        | `src/styles.scss` (bloco `:root` e `.light-mode`)    |
-| Catálogo inicial e categorias  | `src/app/services/menu.service.ts`                   |
+| Catálogo, clientes e pedidos   | `database/02_dados.sql` (MySQL)                       |
+| Chamadas à API                 | `src/app/services/*.service.ts` e `src/app/core/api/`  |
 | Frete e frete grátis           | `src/app/services/cart.service.ts` (`SHIPPING_FEE`, `FREE_SHIPPING_MIN`) |
 | Máximo de parcelas             | `MAX_INSTALLMENTS` em `pages/menu` e `pages/checkout` |
 | Rótulos dos status do pedido   | `src/app/models/index.ts` (`STATUS_CONFIG`) e `pages/my-orders` |

@@ -1,0 +1,2605 @@
+{
+ "usuario_painel": [
+  {
+   "nome": "Gerente Voltz",
+   "email": "gerente@voltz.com",
+   "senha_hash": "$2a$10$.6CGlAyOumznqB7yxRWCB.xxReLUoJ.aqYbErCM4e6mwpLeRnAiQa",
+   "papel": "gerente",
+   "id_usuario": 1
+  },
+  {
+   "nome": "Estoque Voltz",
+   "email": "estoque@voltz.com",
+   "senha_hash": "$2a$10$.6CGlAyOumznqB7yxRWCB.xxReLUoJ.aqYbErCM4e6mwpLeRnAiQa",
+   "papel": "estoque",
+   "id_usuario": 2
+  },
+  {
+   "nome": "Logística Voltz",
+   "email": "logistica@voltz.com",
+   "senha_hash": "$2a$10$.6CGlAyOumznqB7yxRWCB.xxReLUoJ.aqYbErCM4e6mwpLeRnAiQa",
+   "papel": "logistica",
+   "id_usuario": 3
+  }
+ ],
+ "categoria": [
+  {
+   "nome": "Hardware",
+   "descricao": "Placas de vídeo, processadores, memórias, SSDs e PCs montados.",
+   "id_categoria": 1
+  },
+  {
+   "nome": "Periféricos",
+   "descricao": "Teclados, mouses, webcams e acessórios para o seu setup.",
+   "id_categoria": 2
+  },
+  {
+   "nome": "Monitores",
+   "descricao": "Monitores gamer, ultrawide e para o dia a dia.",
+   "id_categoria": 3
+  },
+  {
+   "nome": "Notebooks",
+   "descricao": "Notebooks gamer, ultrafinos e MacBooks.",
+   "id_categoria": 4
+  },
+  {
+   "nome": "Smartphones",
+   "descricao": "Celulares, tablets e relógios inteligentes.",
+   "id_categoria": 5
+  },
+  {
+   "nome": "Games",
+   "descricao": "Consoles, controles e cadeiras gamer.",
+   "id_categoria": 6
+  },
+  {
+   "nome": "Áudio",
+   "descricao": "Fones, headsets, caixas de som e microfones.",
+   "id_categoria": 7
+  }
+ ],
+ "produto": [
+  {
+   "id_categoria": 1,
+   "nome": "Placa de Vídeo GeForce RTX 4070 SUPER 12GB",
+   "descricao": "Arquitetura Ada Lovelace, DLSS 3 e Ray Tracing de 3ª geração. Ideal para jogar em 1440p com taxas altas e para acelerar edição de vídeo e IA.",
+   "marca": "NVIDIA",
+   "preco": 4899.9,
+   "preco_antigo": 5599.9,
+   "estoque": 14,
+   "imagem_url": "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=800&q=80",
+   "destaque": 1,
+   "id_produto": 1
+  },
+  {
+   "id_categoria": 1,
+   "nome": "Processador AMD Ryzen 7 7800X3D",
+   "descricao": "8 núcleos, 16 threads e 96MB de cache L3 com tecnologia 3D V-Cache. Um dos processadores mais rápidos para jogos. Soquete AM5.",
+   "marca": "AMD",
+   "preco": 2399.9,
+   "preco_antigo": 2799.9,
+   "estoque": 22,
+   "imagem_url": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=800&q=80",
+   "destaque": 1,
+   "id_produto": 2
+  },
+  {
+   "id_categoria": 1,
+   "nome": "SSD NVMe 2TB PCIe 4.0",
+   "descricao": "Leitura de até 7.000 MB/s. Carregamentos quase instantâneos em jogos e sistema. Formato M.2 2280, com dissipador opcional.",
+   "marca": "Kingston",
+   "preco": 899.9,
+   "preco_antigo": 1099.9,
+   "estoque": 40,
+   "imagem_url": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 3
+  },
+  {
+   "id_categoria": 1,
+   "nome": "Memória DDR5 32GB (2x16GB) 6000MHz RGB",
+   "descricao": "Kit dual channel com perfil EXPO/XMP e iluminação RGB endereçável. Latência CL30 para máximo desempenho em plataformas AM5 e Intel.",
+   "marca": "Corsair",
+   "preco": 749.9,
+   "preco_antigo": 899.9,
+   "estoque": 31,
+   "imagem_url": "https://images.unsplash.com/photo-1562976540-1502c2145186?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 4
+  },
+  {
+   "id_categoria": 1,
+   "nome": "PC Gamer Ryzen 7 · RTX 4070 · 32GB",
+   "descricao": "Máquina montada e testada: Ryzen 7 7700, RTX 4070, 32GB DDR5, SSD 1TB e fonte 750W 80 Plus Gold. Pronto para jogar em 1440p.",
+   "marca": "VOLTZ",
+   "preco": 8999.9,
+   "preco_antigo": 10499.9,
+   "estoque": 6,
+   "imagem_url": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=800&q=80",
+   "destaque": 1,
+   "id_produto": 5
+  },
+  {
+   "id_categoria": 2,
+   "nome": "Teclado Mecânico Gamer RGB ABNT2",
+   "descricao": "Switches mecânicos lineares, keycaps PBT double-shot e layout ABNT2 com Ç. Iluminação RGB por tecla e cabo USB-C removível.",
+   "marca": "Redragon",
+   "preco": 349.9,
+   "preco_antigo": 449.9,
+   "estoque": 58,
+   "imagem_url": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 6
+  },
+  {
+   "id_categoria": 2,
+   "nome": "Mouse Gamer Sem Fio 26.000 DPI",
+   "descricao": "Sensor óptico de alta precisão, apenas 63g e bateria de até 70 horas. Conexão 2.4GHz de baixa latência e Bluetooth.",
+   "marca": "Logitech",
+   "preco": 499.9,
+   "preco_antigo": 649.9,
+   "estoque": 37,
+   "imagem_url": "https://images.unsplash.com/photo-1527814050087-3793815479db?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 7
+  },
+  {
+   "id_categoria": 7,
+   "nome": "Headset Sem Fio com Cancelamento de Ruído",
+   "descricao": "Drivers de 40mm, cancelamento ativo de ruído e microfone com redução de ruído por IA. Até 30 horas de bateria.",
+   "marca": "Sony",
+   "preco": 899.9,
+   "preco_antigo": 1199.9,
+   "estoque": 19,
+   "imagem_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 8
+  },
+  {
+   "id_categoria": 3,
+   "nome": "Monitor Gamer 27\" QHD 170Hz IPS",
+   "descricao": "Resolução 2560x1440, 1ms GtG, HDR10 e compatibilidade G-Sync. Cores precisas com 95% DCI-P3 e base com ajuste de altura.",
+   "marca": "LG",
+   "preco": 1799.9,
+   "preco_antigo": 2199.9,
+   "estoque": 17,
+   "imagem_url": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 9
+  },
+  {
+   "id_categoria": 3,
+   "nome": "Monitor Ultrawide 34\" Curvo 165Hz",
+   "descricao": "Proporção 21:9, curvatura 1500R e resolução UWQHD. Mais área de trabalho para produtividade e imersão total em jogos.",
+   "marca": "Samsung",
+   "preco": 2699.9,
+   "preco_antigo": 3199.9,
+   "estoque": 9,
+   "imagem_url": "https://images.unsplash.com/photo-1616763355548-1b606f439f86?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 10
+  },
+  {
+   "id_categoria": 4,
+   "nome": "Notebook Gamer Intel Core i7 · RTX 4060",
+   "descricao": "Tela 15,6\" 144Hz, 16GB DDR5, SSD 512GB e teclado RGB. Sistema de refrigeração com dupla ventoinha para longas sessões.",
+   "marca": "Acer",
+   "preco": 6499.9,
+   "preco_antigo": 7499.9,
+   "estoque": 12,
+   "imagem_url": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 11
+  },
+  {
+   "id_categoria": 4,
+   "nome": "Notebook Ultrafino 14\" Intel Core Ultra 5",
+   "descricao": "Apenas 1,2kg, 16GB de RAM, SSD 512GB e bateria para o dia inteiro. Tela 2.8K OLED para trabalho e estudo.",
+   "marca": "ASUS",
+   "preco": 4299.9,
+   "preco_antigo": 4899.9,
+   "estoque": 21,
+   "imagem_url": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 12
+  },
+  {
+   "id_categoria": 4,
+   "nome": "MacBook Air 13\" Chip M3 8GB 256GB",
+   "descricao": "Chip Apple M3, tela Liquid Retina e até 18 horas de bateria. Sem ventoinha: silêncio total mesmo sob carga.",
+   "marca": "Apple",
+   "preco": 8999,
+   "preco_antigo": 9999,
+   "estoque": 8,
+   "imagem_url": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 13
+  },
+  {
+   "id_categoria": 5,
+   "nome": "Smartphone 5G 256GB Tela AMOLED 120Hz",
+   "descricao": "Câmera principal de 50MP com estabilização óptica, 8GB de RAM e bateria de 5000mAh com carregamento rápido de 45W.",
+   "marca": "Samsung",
+   "preco": 2499.9,
+   "preco_antigo": 2999.9,
+   "estoque": 44,
+   "imagem_url": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 14
+  },
+  {
+   "id_categoria": 5,
+   "nome": "iPhone 15 128GB",
+   "descricao": "Dynamic Island, câmera de 48MP e conector USB-C. Chip A16 Bionic com desempenho e eficiência de ponta.",
+   "marca": "Apple",
+   "preco": 5299,
+   "preco_antigo": 5999,
+   "estoque": 16,
+   "imagem_url": "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 15
+  },
+  {
+   "id_categoria": 5,
+   "nome": "Smartwatch com GPS e Monitor Cardíaco",
+   "descricao": "Tela AMOLED always-on, GPS integrado, mais de 100 modos de treino e até 10 dias de bateria. Resistente à água 5ATM.",
+   "marca": "Garmin",
+   "preco": 1199.9,
+   "preco_antigo": 1499.9,
+   "estoque": 27,
+   "imagem_url": "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 16
+  },
+  {
+   "id_categoria": 5,
+   "nome": "Tablet 11\" 128GB com Caneta",
+   "descricao": "Tela 2.5K de 90Hz, quatro alto-falantes e caneta inclusa. Perfeito para estudos, anotações e streaming.",
+   "marca": "Xiaomi",
+   "preco": 1899.9,
+   "preco_antigo": 2299.9,
+   "estoque": 23,
+   "imagem_url": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 17
+  },
+  {
+   "id_categoria": 6,
+   "nome": "Console PlayStation 5 Slim",
+   "descricao": "SSD ultrarrápido de 1TB, suporte a 4K 120fps e Ray Tracing. Inclui controle DualSense com feedback háptico.",
+   "marca": "Sony",
+   "preco": 3799.9,
+   "preco_antigo": 4499.9,
+   "estoque": 11,
+   "imagem_url": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 18
+  },
+  {
+   "id_categoria": 6,
+   "nome": "Controle Sem Fio DualSense",
+   "descricao": "Feedback háptico, gatilhos adaptáveis e microfone embutido. Compatível com PS5 e PC.",
+   "marca": "Sony",
+   "preco": 429.9,
+   "preco_antigo": 499.9,
+   "estoque": 63,
+   "imagem_url": "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 19
+  },
+  {
+   "id_categoria": 6,
+   "nome": "Cadeira Gamer Reclinável 180°",
+   "descricao": "Estrutura em aço, espuma de alta densidade, apoio de braço 4D e almofadas lombar e cervical. Suporta até 150kg.",
+   "marca": "ThunderX3",
+   "preco": 1099.9,
+   "preco_antigo": 1399.9,
+   "estoque": 15,
+   "imagem_url": "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 20
+  },
+  {
+   "id_categoria": 7,
+   "nome": "Fone de Ouvido Bluetooth com Cancelamento de Ruído",
+   "descricao": "Cancelamento ativo de ruído, modo ambiente e até 40 horas de bateria. Conexão multiponto e microfone para chamadas nítidas.",
+   "marca": "JBL",
+   "preco": 799.9,
+   "preco_antigo": 999.9,
+   "estoque": 33,
+   "imagem_url": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80",
+   "destaque": 1,
+   "id_produto": 21
+  },
+  {
+   "id_categoria": 7,
+   "nome": "Caixa de Som Bluetooth Portátil à Prova d'Água",
+   "descricao": "Som potente com graves profundos, resistência IP67 e até 12 horas de bateria. Ideal para festas, viagens e áreas externas.",
+   "marca": "JBL",
+   "preco": 549.9,
+   "preco_antigo": 699.9,
+   "estoque": 41,
+   "imagem_url": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 22
+  },
+  {
+   "id_categoria": 7,
+   "nome": "Microfone Condensador USB para Streaming",
+   "descricao": "Captação cardioide, entrada para fone com monitoramento e controle de ganho. Conexão USB plug and play para lives, podcasts e reuniões.",
+   "marca": "HyperX",
+   "preco": 599.9,
+   "preco_antigo": 749.9,
+   "estoque": 25,
+   "imagem_url": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 23
+  },
+  {
+   "id_categoria": 2,
+   "nome": "Webcam Full HD 1080p com Microfone",
+   "descricao": "Vídeo Full HD a 30fps, foco automático e correção de luz. Microfone duplo com redução de ruído para aulas e reuniões.",
+   "marca": "Logitech",
+   "preco": 429.9,
+   "preco_antigo": 529.9,
+   "estoque": 46,
+   "imagem_url": "https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 24
+  },
+  {
+   "id_categoria": 3,
+   "nome": "Monitor 24\" Full HD 100Hz IPS",
+   "descricao": "Painel IPS Full HD com 100Hz, 1ms MPRT e bordas finas. Ótima entrada para trabalho, estudo e jogos casuais. Saídas HDMI e VGA.",
+   "marca": "AOC",
+   "preco": 699.9,
+   "preco_antigo": 849.9,
+   "estoque": 29,
+   "imagem_url": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&q=80",
+   "destaque": 0,
+   "id_produto": 25
+  }
+ ],
+ "produto_relacionado": [
+  {
+   "id_produto": 1,
+   "id_produto_relacionado": 2
+  },
+  {
+   "id_produto": 1,
+   "id_produto_relacionado": 5
+  },
+  {
+   "id_produto": 1,
+   "id_produto_relacionado": 9
+  },
+  {
+   "id_produto": 2,
+   "id_produto_relacionado": 1
+  },
+  {
+   "id_produto": 2,
+   "id_produto_relacionado": 4
+  },
+  {
+   "id_produto": 3,
+   "id_produto_relacionado": 4
+  },
+  {
+   "id_produto": 4,
+   "id_produto_relacionado": 2
+  },
+  {
+   "id_produto": 4,
+   "id_produto_relacionado": 3
+  },
+  {
+   "id_produto": 5,
+   "id_produto_relacionado": 1
+  },
+  {
+   "id_produto": 5,
+   "id_produto_relacionado": 9
+  },
+  {
+   "id_produto": 6,
+   "id_produto_relacionado": 7
+  },
+  {
+   "id_produto": 6,
+   "id_produto_relacionado": 9
+  },
+  {
+   "id_produto": 6,
+   "id_produto_relacionado": 10
+  },
+  {
+   "id_produto": 6,
+   "id_produto_relacionado": 20
+  },
+  {
+   "id_produto": 7,
+   "id_produto_relacionado": 6
+  },
+  {
+   "id_produto": 7,
+   "id_produto_relacionado": 8
+  },
+  {
+   "id_produto": 7,
+   "id_produto_relacionado": 11
+  },
+  {
+   "id_produto": 8,
+   "id_produto_relacionado": 7
+  },
+  {
+   "id_produto": 8,
+   "id_produto_relacionado": 11
+  },
+  {
+   "id_produto": 8,
+   "id_produto_relacionado": 18
+  },
+  {
+   "id_produto": 9,
+   "id_produto_relacionado": 1
+  },
+  {
+   "id_produto": 9,
+   "id_produto_relacionado": 5
+  },
+  {
+   "id_produto": 9,
+   "id_produto_relacionado": 6
+  },
+  {
+   "id_produto": 10,
+   "id_produto_relacionado": 6
+  },
+  {
+   "id_produto": 11,
+   "id_produto_relacionado": 7
+  },
+  {
+   "id_produto": 11,
+   "id_produto_relacionado": 8
+  },
+  {
+   "id_produto": 12,
+   "id_produto_relacionado": 25
+  },
+  {
+   "id_produto": 13,
+   "id_produto_relacionado": 21
+  },
+  {
+   "id_produto": 14,
+   "id_produto_relacionado": 16
+  },
+  {
+   "id_produto": 14,
+   "id_produto_relacionado": 22
+  },
+  {
+   "id_produto": 15,
+   "id_produto_relacionado": 16
+  },
+  {
+   "id_produto": 15,
+   "id_produto_relacionado": 21
+  },
+  {
+   "id_produto": 16,
+   "id_produto_relacionado": 14
+  },
+  {
+   "id_produto": 16,
+   "id_produto_relacionado": 15
+  },
+  {
+   "id_produto": 17,
+   "id_produto_relacionado": 21
+  },
+  {
+   "id_produto": 18,
+   "id_produto_relacionado": 8
+  },
+  {
+   "id_produto": 18,
+   "id_produto_relacionado": 19
+  },
+  {
+   "id_produto": 18,
+   "id_produto_relacionado": 20
+  },
+  {
+   "id_produto": 19,
+   "id_produto_relacionado": 18
+  },
+  {
+   "id_produto": 20,
+   "id_produto_relacionado": 6
+  },
+  {
+   "id_produto": 20,
+   "id_produto_relacionado": 18
+  },
+  {
+   "id_produto": 21,
+   "id_produto_relacionado": 13
+  },
+  {
+   "id_produto": 21,
+   "id_produto_relacionado": 15
+  },
+  {
+   "id_produto": 21,
+   "id_produto_relacionado": 17
+  },
+  {
+   "id_produto": 22,
+   "id_produto_relacionado": 14
+  },
+  {
+   "id_produto": 23,
+   "id_produto_relacionado": 24
+  },
+  {
+   "id_produto": 24,
+   "id_produto_relacionado": 23
+  },
+  {
+   "id_produto": 24,
+   "id_produto_relacionado": 25
+  },
+  {
+   "id_produto": 25,
+   "id_produto_relacionado": 12
+  },
+  {
+   "id_produto": 25,
+   "id_produto_relacionado": 24
+  }
+ ],
+ "cliente": [
+  {
+   "nome": "Ana Beatriz Souza",
+   "email": "ana.beatriz.souza@email.com",
+   "telefone": "(11) 96487-6234",
+   "endereco": "Av. Paulista, 915 - Santana, São Paulo - SP",
+   "data_criacao": "2026-09-13 18:44:00",
+   "id_cliente": 1
+  },
+  {
+   "nome": "Bruno Henrique Lima",
+   "email": "bruno.henrique.lima@email.com",
+   "telefone": "(11) 99665-7891",
+   "endereco": "Rua Haddock Lobo, 779 - Lapa, São Paulo - SP",
+   "data_criacao": "2026-09-24 18:30:00",
+   "id_cliente": 2
+  },
+  {
+   "nome": "Camila Ferreira",
+   "email": "camila.ferreira@email.com",
+   "telefone": "(11) 96982-1041",
+   "endereco": "Av. Paulista, 123 - Ipiranga, São Paulo - SP",
+   "data_criacao": "2026-09-27 12:35:00",
+   "id_cliente": 3
+  },
+  {
+   "nome": "Daniel Oliveira",
+   "email": "daniel.oliveira@email.com",
+   "telefone": "(11) 99345-2606",
+   "endereco": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "data_criacao": "2026-09-22 18:19:00",
+   "id_cliente": 4
+  },
+  {
+   "nome": "Eduarda Martins",
+   "email": "eduarda.martins@email.com",
+   "telefone": "(11) 98782-6148",
+   "endereco": "Rua Vergueiro, 416 - Ipiranga, São Paulo - SP",
+   "data_criacao": "2026-09-27 20:41:00",
+   "id_cliente": 5
+  },
+  {
+   "nome": "Felipe Santos",
+   "email": "felipe.santos@email.com",
+   "telefone": "(11) 97424-6843",
+   "endereco": "Av. Rebouças, 773 - Pinheiros, São Paulo - SP",
+   "data_criacao": "2026-09-26 19:30:00",
+   "id_cliente": 6
+  },
+  {
+   "nome": "Gabriela Rocha",
+   "email": "gabriela.rocha@email.com",
+   "telefone": "(11) 98961-6577",
+   "endereco": "Av. Paulista, 580 - Ipiranga, São Paulo - SP",
+   "data_criacao": "2026-09-22 14:12:00",
+   "id_cliente": 7
+  },
+  {
+   "nome": "Henrique Almeida",
+   "email": "henrique.almeida@email.com",
+   "telefone": "(11) 97178-8494",
+   "endereco": "Rua Augusta, 907 - Ipiranga, São Paulo - SP",
+   "data_criacao": "2026-09-19 12:00:00",
+   "id_cliente": 8
+  },
+  {
+   "nome": "Isabela Costa",
+   "email": "isabela.costa@email.com",
+   "telefone": "(11) 96101-7043",
+   "endereco": "Rua da Consolação, 482 - Vila Mariana, São Paulo - SP",
+   "data_criacao": "2026-09-11 10:41:00",
+   "id_cliente": 9
+  },
+  {
+   "nome": "João Pedro Ribeiro",
+   "email": "joao.pedro.ribeiro@email.com",
+   "telefone": "(11) 96371-7533",
+   "endereco": "Rua Haddock Lobo, 898 - Pinheiros, São Paulo - SP",
+   "data_criacao": "2026-09-29 15:51:00",
+   "id_cliente": 10
+  },
+  {
+   "nome": "Larissa Carvalho",
+   "email": "larissa.carvalho@email.com",
+   "telefone": "(11) 97742-9296",
+   "endereco": "Rua Haddock Lobo, 417 - Ipiranga, São Paulo - SP",
+   "data_criacao": "2026-09-26 15:23:00",
+   "id_cliente": 11
+  },
+  {
+   "nome": "Mateus Barbosa",
+   "email": "mateus.barbosa@email.com",
+   "telefone": "(11) 99458-7880",
+   "endereco": "Rua Haddock Lobo, 535 - Bela Vista, São Paulo - SP",
+   "data_criacao": "2026-09-16 12:44:00",
+   "id_cliente": 12
+  },
+  {
+   "nome": "Natália Gomes",
+   "email": "natalia.gomes@email.com",
+   "telefone": "(11) 98357-4678",
+   "endereco": "Rua Augusta, 847 - Bela Vista, São Paulo - SP",
+   "data_criacao": "2026-09-25 15:32:00",
+   "id_cliente": 13
+  },
+  {
+   "nome": "Pedro Augusto Dias",
+   "email": "pedro.augusto.dias@email.com",
+   "telefone": "(11) 99943-9572",
+   "endereco": "Av. Paulista, 744 - Vila Mariana, São Paulo - SP",
+   "data_criacao": "2026-09-25 20:27:00",
+   "id_cliente": 14
+  },
+  {
+   "nome": "Rafaela Mendes",
+   "email": "rafaela.mendes@email.com",
+   "telefone": "(11) 97925-3333",
+   "endereco": "Rua Haddock Lobo, 915 - Santana, São Paulo - SP",
+   "data_criacao": "2026-09-27 18:58:00",
+   "id_cliente": 15
+  }
+ ],
+ "pedido": [
+  {
+   "numero": "VTZ-1001",
+   "id_cliente": 8,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 549.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-02 11:43:35",
+   "data_atualizacao": "2026-10-03 00:43:35",
+   "id_pedido": 1
+  },
+  {
+   "numero": "VTZ-1002",
+   "id_cliente": 14,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 744 - Vila Mariana, São Paulo - SP",
+   "frete": 24.9,
+   "valor_total": 884.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-02 18:13:50",
+   "data_atualizacao": "2026-10-03 18:13:50",
+   "id_pedido": 2
+  },
+  {
+   "numero": "VTZ-1003",
+   "id_cliente": 13,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Augusta, 847 - Bela Vista, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 16599.7,
+   "status": "cancelado",
+   "motivo_cancelamento": "Desistência do cliente",
+   "data_criacao": "2026-10-03 14:29:58",
+   "data_atualizacao": "2026-10-04 10:29:58",
+   "id_pedido": 3
+  },
+  {
+   "numero": "VTZ-1004",
+   "id_cliente": 3,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 123 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1099.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-06 12:00:05",
+   "data_atualizacao": "2026-10-07 02:00:05",
+   "id_pedido": 4
+  },
+  {
+   "numero": "VTZ-1005",
+   "id_cliente": 4,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1449.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-07 19:35:48",
+   "data_atualizacao": "2026-10-08 08:35:48",
+   "id_pedido": 5
+  },
+  {
+   "numero": "VTZ-1006",
+   "id_cliente": 13,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 7599.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-08 20:24:00",
+   "data_atualizacao": "2026-10-09 14:24:00",
+   "id_pedido": 6
+  },
+  {
+   "numero": "VTZ-1007",
+   "id_cliente": 14,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 744 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 10199.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-09 11:50:58",
+   "data_atualizacao": "2026-10-10 03:50:58",
+   "id_pedido": 7
+  },
+  {
+   "numero": "VTZ-1008",
+   "id_cliente": 4,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 10289.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-09 18:13:27",
+   "data_atualizacao": "2026-10-10 21:13:27",
+   "id_pedido": 8
+  },
+  {
+   "numero": "VTZ-1009",
+   "id_cliente": 14,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 744 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 4299.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-10 11:02:48",
+   "data_atualizacao": "2026-10-11 09:02:48",
+   "id_pedido": 9
+  },
+  {
+   "numero": "VTZ-1010",
+   "id_cliente": 4,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 19599.4,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-10 12:29:31",
+   "data_atualizacao": "2026-10-11 09:29:31",
+   "id_pedido": 10
+  },
+  {
+   "numero": "VTZ-1011",
+   "id_cliente": 5,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Vergueiro, 416 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 2229.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-10 17:28:07",
+   "data_atualizacao": "2026-10-11 21:28:07",
+   "id_pedido": 11
+  },
+  {
+   "numero": "VTZ-1012",
+   "id_cliente": 5,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Vergueiro, 416 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 12798.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-10 18:32:20",
+   "data_atualizacao": "2026-10-10 23:32:20",
+   "id_pedido": 12
+  },
+  {
+   "numero": "VTZ-1013",
+   "id_cliente": 6,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Rebouças, 773 - Pinheiros, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 8699.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-10 20:09:28",
+   "data_atualizacao": "2026-10-11 01:09:28",
+   "id_pedido": 13
+  },
+  {
+   "numero": "VTZ-1014",
+   "id_cliente": 4,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 7599.6,
+   "status": "cancelado",
+   "motivo_cancelamento": "Desistência do cliente",
+   "data_criacao": "2026-10-13 18:06:50",
+   "data_atualizacao": "2026-10-14 12:06:50",
+   "id_pedido": 14
+  },
+  {
+   "numero": "VTZ-1015",
+   "id_cliente": 1,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 915 - Santana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 31599.5,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-13 20:18:59",
+   "data_atualizacao": "2026-10-14 08:18:59",
+   "id_pedido": 15
+  },
+  {
+   "numero": "VTZ-1016",
+   "id_cliente": 5,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Vergueiro, 416 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 8999.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-13 22:10:06",
+   "data_atualizacao": "2026-10-14 02:10:06",
+   "id_pedido": 16
+  },
+  {
+   "numero": "VTZ-1017",
+   "id_cliente": 12,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 535 - Bela Vista, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1799.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-15 13:04:00",
+   "data_atualizacao": "2026-10-15 17:04:00",
+   "id_pedido": 17
+  },
+  {
+   "numero": "VTZ-1018",
+   "id_cliente": 4,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 5848.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-16 08:42:37",
+   "data_atualizacao": "2026-10-17 09:42:37",
+   "id_pedido": 18
+  },
+  {
+   "numero": "VTZ-1019",
+   "id_cliente": 13,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 6849.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-18 08:06:15",
+   "data_atualizacao": "2026-10-18 21:06:15",
+   "id_pedido": 19
+  },
+  {
+   "numero": "VTZ-1020",
+   "id_cliente": 4,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1499.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-18 21:49:16",
+   "data_atualizacao": "2026-10-19 02:49:16",
+   "id_pedido": 20
+  },
+  {
+   "numero": "VTZ-1021",
+   "id_cliente": 10,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 898 - Pinheiros, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 11399.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-20 11:38:56",
+   "data_atualizacao": "2026-10-20 22:38:56",
+   "id_pedido": 21
+  },
+  {
+   "numero": "VTZ-1022",
+   "id_cliente": 9,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua da Consolação, 482 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 4499.8,
+   "status": "cancelado",
+   "motivo_cancelamento": "Pagamento não aprovado",
+   "data_criacao": "2026-10-21 16:39:51",
+   "data_atualizacao": "2026-10-22 06:39:51",
+   "id_pedido": 22
+  },
+  {
+   "numero": "VTZ-1023",
+   "id_cliente": 13,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 2049.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-22 17:17:52",
+   "data_atualizacao": "2026-10-23 02:17:52",
+   "id_pedido": 23
+  },
+  {
+   "numero": "VTZ-1024",
+   "id_cliente": 5,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Vergueiro, 416 - Ipiranga, São Paulo - SP",
+   "frete": 24.9,
+   "valor_total": 454.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-22 21:24:19",
+   "data_atualizacao": "2026-10-23 08:24:19",
+   "id_pedido": 24
+  },
+  {
+   "numero": "VTZ-1025",
+   "id_cliente": 13,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Augusta, 847 - Bela Vista, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1499.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-23 12:18:36",
+   "data_atualizacao": "2026-10-24 14:18:36",
+   "id_pedido": 25
+  },
+  {
+   "numero": "VTZ-1026",
+   "id_cliente": 5,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 5199.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-23 13:48:40",
+   "data_atualizacao": "2026-10-23 21:48:40",
+   "id_pedido": 26
+  },
+  {
+   "numero": "VTZ-1027",
+   "id_cliente": 4,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 4579.7,
+   "status": "cancelado",
+   "motivo_cancelamento": "Desistência do cliente",
+   "data_criacao": "2026-10-23 18:34:13",
+   "data_atualizacao": "2026-10-24 08:34:13",
+   "id_pedido": 27
+  },
+  {
+   "numero": "VTZ-1028",
+   "id_cliente": 12,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 535 - Bela Vista, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1799.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-23 20:39:50",
+   "data_atualizacao": "2026-10-24 08:39:50",
+   "id_pedido": 28
+  },
+  {
+   "numero": "VTZ-1029",
+   "id_cliente": 8,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Augusta, 907 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 6499.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-24 17:24:51",
+   "data_atualizacao": "2026-10-25 19:24:51",
+   "id_pedido": 29
+  },
+  {
+   "numero": "VTZ-1030",
+   "id_cliente": 14,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 744 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1529.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-24 21:22:20",
+   "data_atualizacao": "2026-10-25 21:22:20",
+   "id_pedido": 30
+  },
+  {
+   "numero": "VTZ-1031",
+   "id_cliente": 9,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 6099.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-24 21:55:31",
+   "data_atualizacao": "2026-10-25 08:55:31",
+   "id_pedido": 31
+  },
+  {
+   "numero": "VTZ-1032",
+   "id_cliente": 6,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Rebouças, 773 - Pinheiros, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 3799.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-25 16:14:43",
+   "data_atualizacao": "2026-10-26 20:14:43",
+   "id_pedido": 32
+  },
+  {
+   "numero": "VTZ-1033",
+   "id_cliente": 14,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 744 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 2249.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-25 21:20:38",
+   "data_atualizacao": "2026-10-26 11:20:38",
+   "id_pedido": 33
+  },
+  {
+   "numero": "VTZ-1034",
+   "id_cliente": 9,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 499.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-26 12:17:27",
+   "data_atualizacao": "2026-10-27 10:17:27",
+   "id_pedido": 34
+  },
+  {
+   "numero": "VTZ-1035",
+   "id_cliente": 6,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Rebouças, 773 - Pinheiros, São Paulo - SP",
+   "frete": 24.9,
+   "valor_total": 824.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-26 12:41:34",
+   "data_atualizacao": "2026-10-27 06:41:34",
+   "id_pedido": 35
+  },
+  {
+   "numero": "VTZ-1036",
+   "id_cliente": 3,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 123 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 19099.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-26 17:43:56",
+   "data_atualizacao": "2026-10-27 20:43:56",
+   "id_pedido": 36
+  },
+  {
+   "numero": "VTZ-1037",
+   "id_cliente": 5,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Vergueiro, 416 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 13899.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-26 21:23:06",
+   "data_atualizacao": "2026-10-28 03:23:06",
+   "id_pedido": 37
+  },
+  {
+   "numero": "VTZ-1038",
+   "id_cliente": 1,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 915 - Santana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1899.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-27 14:26:42",
+   "data_atualizacao": "2026-10-28 19:26:42",
+   "id_pedido": 38
+  },
+  {
+   "numero": "VTZ-1039",
+   "id_cliente": 12,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 535 - Bela Vista, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 6749.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-27 16:58:07",
+   "data_atualizacao": "2026-10-27 17:58:07",
+   "id_pedido": 39
+  },
+  {
+   "numero": "VTZ-1040",
+   "id_cliente": 4,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 5899.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-27 19:46:51",
+   "data_atualizacao": "2026-10-28 02:46:51",
+   "id_pedido": 40
+  },
+  {
+   "numero": "VTZ-1041",
+   "id_cliente": 9,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua da Consolação, 482 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 9088.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-27 21:34:14",
+   "data_atualizacao": "2026-10-28 17:34:14",
+   "id_pedido": 41
+  },
+  {
+   "numero": "VTZ-1042",
+   "id_cliente": 15,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 915 - Santana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 2079.7,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-28 17:02:12",
+   "data_atualizacao": "2026-10-29 07:02:12",
+   "id_pedido": 42
+  },
+  {
+   "numero": "VTZ-1043",
+   "id_cliente": 7,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 580 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 17999.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-30 18:41:45",
+   "data_atualizacao": "2026-10-31 06:41:45",
+   "id_pedido": 43
+  },
+  {
+   "numero": "VTZ-1044",
+   "id_cliente": 8,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Augusta, 907 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1799.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-30 20:42:11",
+   "data_atualizacao": "2026-10-31 14:42:11",
+   "id_pedido": 44
+  },
+  {
+   "numero": "VTZ-1045",
+   "id_cliente": 6,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Rebouças, 773 - Pinheiros, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1099.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-10-31 16:45:50",
+   "data_atualizacao": "2026-11-01 14:45:50",
+   "id_pedido": 45
+  },
+  {
+   "numero": "VTZ-1046",
+   "id_cliente": 8,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Augusta, 907 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 3799.8,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-01 18:59:49",
+   "data_atualizacao": "2026-11-01 21:59:49",
+   "id_pedido": 46
+  },
+  {
+   "numero": "VTZ-1047",
+   "id_cliente": 2,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 779 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 5299,
+   "status": "saiu_para_entrega",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-02 18:26:34",
+   "data_atualizacao": "2026-11-03 14:26:34",
+   "id_pedido": 47
+  },
+  {
+   "numero": "VTZ-1048",
+   "id_cliente": 1,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 915 - Santana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 10399.6,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-02 21:08:10",
+   "data_atualizacao": "2026-11-03 00:08:10",
+   "id_pedido": 48
+  },
+  {
+   "numero": "VTZ-1049",
+   "id_cliente": 9,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua da Consolação, 482 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 6499.9,
+   "status": "pronto",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-03 09:55:48",
+   "data_atualizacao": "2026-11-04 14:55:48",
+   "id_pedido": 49
+  },
+  {
+   "numero": "VTZ-1050",
+   "id_cliente": 4,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Haddock Lobo, 21 - Lapa, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1899.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-03 10:28:37",
+   "data_atualizacao": "2026-11-03 16:28:37",
+   "id_pedido": 50
+  },
+  {
+   "numero": "VTZ-1051",
+   "id_cliente": 13,
+   "id_entregador": 3,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua Augusta, 847 - Bela Vista, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 1199.9,
+   "status": "entregue",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-04 09:30:20",
+   "data_atualizacao": "2026-11-04 22:30:20",
+   "id_pedido": 51
+  },
+  {
+   "numero": "VTZ-1052",
+   "id_cliente": 9,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua da Consolação, 482 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 20797.8,
+   "status": "em_preparacao",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-04 13:59:11",
+   "data_atualizacao": "2026-11-05 17:59:11",
+   "id_pedido": 52
+  },
+  {
+   "numero": "VTZ-1053",
+   "id_cliente": 9,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Rua da Consolação, 482 - Vila Mariana, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 4299.9,
+   "status": "em_preparacao",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-04 15:04:03",
+   "data_atualizacao": "2026-11-05 17:04:03",
+   "id_pedido": 53
+  },
+  {
+   "numero": "VTZ-1054",
+   "id_cliente": 7,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 580 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 9699.7,
+   "status": "pendente",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-04 15:10:22",
+   "data_atualizacao": "2026-11-04 15:10:22",
+   "id_pedido": 54
+  },
+  {
+   "numero": "VTZ-1055",
+   "id_cliente": 3,
+   "id_entregador": null,
+   "tipo_entrega": "entrega",
+   "endereco_entrega": "Av. Paulista, 123 - Ipiranga, São Paulo - SP",
+   "frete": 0,
+   "valor_total": 6499.5,
+   "status": "pendente",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-05 20:18:29",
+   "data_atualizacao": "2026-11-05 20:18:29",
+   "id_pedido": 55
+  },
+  {
+   "numero": "VTZ-1056",
+   "id_cliente": 12,
+   "id_entregador": null,
+   "tipo_entrega": "retirada",
+   "endereco_entrega": null,
+   "frete": 0,
+   "valor_total": 1899.9,
+   "status": "saiu_para_entrega",
+   "motivo_cancelamento": null,
+   "data_criacao": "2026-11-05 20:30:04",
+   "data_atualizacao": "2026-11-06 03:30:04",
+   "id_pedido": 56
+  }
+ ],
+ "item_pedido": [
+  {
+   "id_pedido": 1,
+   "id_produto": 22,
+   "quantidade": 1,
+   "preco_unitario": 549.9,
+   "id_item": 1
+  },
+  {
+   "id_pedido": 2,
+   "id_produto": 24,
+   "quantidade": 2,
+   "preco_unitario": 429.9,
+   "id_item": 2
+  },
+  {
+   "id_pedido": 3,
+   "id_produto": 1,
+   "quantidade": 1,
+   "preco_unitario": 4899.9,
+   "id_item": 3
+  },
+  {
+   "id_pedido": 3,
+   "id_produto": 10,
+   "quantidade": 1,
+   "preco_unitario": 2699.9,
+   "id_item": 4
+  },
+  {
+   "id_pedido": 3,
+   "id_produto": 5,
+   "quantidade": 1,
+   "preco_unitario": 8999.9,
+   "id_item": 5
+  },
+  {
+   "id_pedido": 4,
+   "id_produto": 20,
+   "quantidade": 1,
+   "preco_unitario": 1099.9,
+   "id_item": 6
+  },
+  {
+   "id_pedido": 5,
+   "id_produto": 22,
+   "quantidade": 1,
+   "preco_unitario": 549.9,
+   "id_item": 7
+  },
+  {
+   "id_pedido": 5,
+   "id_produto": 8,
+   "quantidade": 1,
+   "preco_unitario": 899.9,
+   "id_item": 8
+  },
+  {
+   "id_pedido": 6,
+   "id_produto": 17,
+   "quantidade": 1,
+   "preco_unitario": 1899.9,
+   "id_item": 9
+  },
+  {
+   "id_pedido": 6,
+   "id_produto": 21,
+   "quantidade": 1,
+   "preco_unitario": 799.9,
+   "id_item": 10
+  },
+  {
+   "id_pedido": 6,
+   "id_produto": 1,
+   "quantidade": 1,
+   "preco_unitario": 4899.9,
+   "id_item": 11
+  },
+  {
+   "id_pedido": 7,
+   "id_produto": 17,
+   "quantidade": 1,
+   "preco_unitario": 1899.9,
+   "id_item": 12
+  },
+  {
+   "id_pedido": 7,
+   "id_produto": 9,
+   "quantidade": 1,
+   "preco_unitario": 1799.9,
+   "id_item": 13
+  },
+  {
+   "id_pedido": 7,
+   "id_produto": 11,
+   "quantidade": 1,
+   "preco_unitario": 6499.9,
+   "id_item": 14
+  },
+  {
+   "id_pedido": 8,
+   "id_produto": 5,
+   "quantidade": 1,
+   "preco_unitario": 8999.9,
+   "id_item": 15
+  },
+  {
+   "id_pedido": 8,
+   "id_produto": 24,
+   "quantidade": 3,
+   "preco_unitario": 429.9,
+   "id_item": 16
+  },
+  {
+   "id_pedido": 9,
+   "id_produto": 12,
+   "quantidade": 1,
+   "preco_unitario": 4299.9,
+   "id_item": 17
+  },
+  {
+   "id_pedido": 10,
+   "id_produto": 1,
+   "quantidade": 2,
+   "preco_unitario": 4899.9,
+   "id_item": 18
+  },
+  {
+   "id_pedido": 10,
+   "id_produto": 2,
+   "quantidade": 2,
+   "preco_unitario": 2399.9,
+   "id_item": 19
+  },
+  {
+   "id_pedido": 10,
+   "id_produto": 14,
+   "quantidade": 2,
+   "preco_unitario": 2499.9,
+   "id_item": 20
+  },
+  {
+   "id_pedido": 11,
+   "id_produto": 24,
+   "quantidade": 1,
+   "preco_unitario": 429.9,
+   "id_item": 21
+  },
+  {
+   "id_pedido": 11,
+   "id_produto": 23,
+   "quantidade": 3,
+   "preco_unitario": 599.9,
+   "id_item": 22
+  },
+  {
+   "id_pedido": 12,
+   "id_produto": 13,
+   "quantidade": 1,
+   "preco_unitario": 8999,
+   "id_item": 23
+  },
+  {
+   "id_pedido": 12,
+   "id_produto": 18,
+   "quantidade": 1,
+   "preco_unitario": 3799.9,
+   "id_item": 24
+  },
+  {
+   "id_pedido": 13,
+   "id_produto": 18,
+   "quantidade": 1,
+   "preco_unitario": 3799.9,
+   "id_item": 25
+  },
+  {
+   "id_pedido": 13,
+   "id_produto": 10,
+   "quantidade": 1,
+   "preco_unitario": 2699.9,
+   "id_item": 26
+  },
+  {
+   "id_pedido": 13,
+   "id_produto": 20,
+   "quantidade": 2,
+   "preco_unitario": 1099.9,
+   "id_item": 27
+  },
+  {
+   "id_pedido": 14,
+   "id_produto": 21,
+   "quantidade": 2,
+   "preco_unitario": 799.9,
+   "id_item": 28
+  },
+  {
+   "id_pedido": 14,
+   "id_produto": 1,
+   "quantidade": 1,
+   "preco_unitario": 4899.9,
+   "id_item": 29
+  },
+  {
+   "id_pedido": 14,
+   "id_produto": 20,
+   "quantidade": 1,
+   "preco_unitario": 1099.9,
+   "id_item": 30
+  },
+  {
+   "id_pedido": 15,
+   "id_produto": 1,
+   "quantidade": 2,
+   "preco_unitario": 4899.9,
+   "id_item": 31
+  },
+  {
+   "id_pedido": 15,
+   "id_produto": 18,
+   "quantidade": 1,
+   "preco_unitario": 3799.9,
+   "id_item": 32
+  },
+  {
+   "id_pedido": 15,
+   "id_produto": 5,
+   "quantidade": 2,
+   "preco_unitario": 8999.9,
+   "id_item": 33
+  },
+  {
+   "id_pedido": 16,
+   "id_produto": 5,
+   "quantidade": 1,
+   "preco_unitario": 8999.9,
+   "id_item": 34
+  },
+  {
+   "id_pedido": 17,
+   "id_produto": 9,
+   "quantidade": 1,
+   "preco_unitario": 1799.9,
+   "id_item": 35
+  },
+  {
+   "id_pedido": 18,
+   "id_produto": 22,
+   "quantidade": 1,
+   "preco_unitario": 549.9,
+   "id_item": 36
+  },
+  {
+   "id_pedido": 18,
+   "id_produto": 15,
+   "quantidade": 1,
+   "preco_unitario": 5299,
+   "id_item": 37
+  },
+  {
+   "id_pedido": 19,
+   "id_produto": 6,
+   "quantidade": 1,
+   "preco_unitario": 349.9,
+   "id_item": 38
+  },
+  {
+   "id_pedido": 19,
+   "id_produto": 11,
+   "quantidade": 1,
+   "preco_unitario": 6499.9,
+   "id_item": 39
+  },
+  {
+   "id_pedido": 20,
+   "id_produto": 8,
+   "quantidade": 1,
+   "preco_unitario": 899.9,
+   "id_item": 40
+  },
+  {
+   "id_pedido": 20,
+   "id_produto": 23,
+   "quantidade": 1,
+   "preco_unitario": 599.9,
+   "id_item": 41
+  },
+  {
+   "id_pedido": 21,
+   "id_produto": 3,
+   "quantidade": 1,
+   "preco_unitario": 899.9,
+   "id_item": 42
+  },
+  {
+   "id_pedido": 21,
+   "id_produto": 4,
+   "quantidade": 2,
+   "preco_unitario": 749.9,
+   "id_item": 43
+  },
+  {
+   "id_pedido": 21,
+   "id_produto": 5,
+   "quantidade": 1,
+   "preco_unitario": 8999.9,
+   "id_item": 44
+  },
+  {
+   "id_pedido": 22,
+   "id_produto": 9,
+   "quantidade": 1,
+   "preco_unitario": 1799.9,
+   "id_item": 45
+  },
+  {
+   "id_pedido": 22,
+   "id_produto": 10,
+   "quantidade": 1,
+   "preco_unitario": 2699.9,
+   "id_item": 46
+  },
+  {
+   "id_pedido": 23,
+   "id_produto": 22,
+   "quantidade": 1,
+   "preco_unitario": 549.9,
+   "id_item": 47
+  },
+  {
+   "id_pedido": 23,
+   "id_produto": 21,
+   "quantidade": 1,
+   "preco_unitario": 799.9,
+   "id_item": 48
+  },
+  {
+   "id_pedido": 23,
+   "id_produto": 25,
+   "quantidade": 1,
+   "preco_unitario": 699.9,
+   "id_item": 49
+  },
+  {
+   "id_pedido": 24,
+   "id_produto": 19,
+   "quantidade": 1,
+   "preco_unitario": 429.9,
+   "id_item": 50
+  },
+  {
+   "id_pedido": 25,
+   "id_produto": 4,
+   "quantidade": 2,
+   "preco_unitario": 749.9,
+   "id_item": 51
+  },
+  {
+   "id_pedido": 26,
+   "id_produto": 12,
+   "quantidade": 1,
+   "preco_unitario": 4299.9,
+   "id_item": 52
+  },
+  {
+   "id_pedido": 26,
+   "id_produto": 3,
+   "quantidade": 1,
+   "preco_unitario": 899.9,
+   "id_item": 53
+  },
+  {
+   "id_pedido": 27,
+   "id_produto": 18,
+   "quantidade": 1,
+   "preco_unitario": 3799.9,
+   "id_item": 54
+  },
+  {
+   "id_pedido": 27,
+   "id_produto": 19,
+   "quantidade": 1,
+   "preco_unitario": 429.9,
+   "id_item": 55
+  },
+  {
+   "id_pedido": 27,
+   "id_produto": 6,
+   "quantidade": 1,
+   "preco_unitario": 349.9,
+   "id_item": 56
+  },
+  {
+   "id_pedido": 28,
+   "id_produto": 8,
+   "quantidade": 2,
+   "preco_unitario": 899.9,
+   "id_item": 57
+  },
+  {
+   "id_pedido": 29,
+   "id_produto": 11,
+   "quantidade": 1,
+   "preco_unitario": 6499.9,
+   "id_item": 58
+  },
+  {
+   "id_pedido": 30,
+   "id_produto": 24,
+   "quantidade": 1,
+   "preco_unitario": 429.9,
+   "id_item": 59
+  },
+  {
+   "id_pedido": 30,
+   "id_produto": 7,
+   "quantidade": 1,
+   "preco_unitario": 499.9,
+   "id_item": 60
+  },
+  {
+   "id_pedido": 30,
+   "id_produto": 23,
+   "quantidade": 1,
+   "preco_unitario": 599.9,
+   "id_item": 61
+  },
+  {
+   "id_pedido": 31,
+   "id_produto": 25,
+   "quantidade": 1,
+   "preco_unitario": 699.9,
+   "id_item": 62
+  },
+  {
+   "id_pedido": 31,
+   "id_produto": 10,
+   "quantidade": 2,
+   "preco_unitario": 2699.9,
+   "id_item": 63
+  },
+  {
+   "id_pedido": 32,
+   "id_produto": 18,
+   "quantidade": 1,
+   "preco_unitario": 3799.9,
+   "id_item": 64
+  },
+  {
+   "id_pedido": 33,
+   "id_produto": 4,
+   "quantidade": 3,
+   "preco_unitario": 749.9,
+   "id_item": 65
+  },
+  {
+   "id_pedido": 34,
+   "id_produto": 7,
+   "quantidade": 1,
+   "preco_unitario": 499.9,
+   "id_item": 66
+  },
+  {
+   "id_pedido": 35,
+   "id_produto": 21,
+   "quantidade": 1,
+   "preco_unitario": 799.9,
+   "id_item": 67
+  },
+  {
+   "id_pedido": 36,
+   "id_produto": 5,
+   "quantidade": 2,
+   "preco_unitario": 8999.9,
+   "id_item": 68
+  },
+  {
+   "id_pedido": 36,
+   "id_produto": 22,
+   "quantidade": 2,
+   "preco_unitario": 549.9,
+   "id_item": 69
+  },
+  {
+   "id_pedido": 37,
+   "id_produto": 23,
+   "quantidade": 1,
+   "preco_unitario": 599.9,
+   "id_item": 70
+  },
+  {
+   "id_pedido": 37,
+   "id_produto": 12,
+   "quantidade": 1,
+   "preco_unitario": 4299.9,
+   "id_item": 71
+  },
+  {
+   "id_pedido": 37,
+   "id_produto": 5,
+   "quantidade": 1,
+   "preco_unitario": 8999.9,
+   "id_item": 72
+  },
+  {
+   "id_pedido": 38,
+   "id_produto": 17,
+   "quantidade": 1,
+   "preco_unitario": 1899.9,
+   "id_item": 73
+  },
+  {
+   "id_pedido": 39,
+   "id_produto": 16,
+   "quantidade": 1,
+   "preco_unitario": 1199.9,
+   "id_item": 74
+  },
+  {
+   "id_pedido": 39,
+   "id_produto": 2,
+   "quantidade": 2,
+   "preco_unitario": 2399.9,
+   "id_item": 75
+  },
+  {
+   "id_pedido": 39,
+   "id_produto": 4,
+   "quantidade": 1,
+   "preco_unitario": 749.9,
+   "id_item": 76
+  },
+  {
+   "id_pedido": 40,
+   "id_produto": 3,
+   "quantidade": 1,
+   "preco_unitario": 899.9,
+   "id_item": 77
+  },
+  {
+   "id_pedido": 40,
+   "id_produto": 14,
+   "quantidade": 2,
+   "preco_unitario": 2499.9,
+   "id_item": 78
+  },
+  {
+   "id_pedido": 41,
+   "id_produto": 14,
+   "quantidade": 1,
+   "preco_unitario": 2499.9,
+   "id_item": 79
+  },
+  {
+   "id_pedido": 41,
+   "id_produto": 24,
+   "quantidade": 3,
+   "preco_unitario": 429.9,
+   "id_item": 80
+  },
+  {
+   "id_pedido": 41,
+   "id_produto": 15,
+   "quantidade": 1,
+   "preco_unitario": 5299,
+   "id_item": 81
+  },
+  {
+   "id_pedido": 42,
+   "id_produto": 24,
+   "quantidade": 1,
+   "preco_unitario": 429.9,
+   "id_item": 82
+  },
+  {
+   "id_pedido": 42,
+   "id_produto": 3,
+   "quantidade": 1,
+   "preco_unitario": 899.9,
+   "id_item": 83
+  },
+  {
+   "id_pedido": 42,
+   "id_produto": 4,
+   "quantidade": 1,
+   "preco_unitario": 749.9,
+   "id_item": 84
+  },
+  {
+   "id_pedido": 43,
+   "id_produto": 5,
+   "quantidade": 2,
+   "preco_unitario": 8999.9,
+   "id_item": 85
+  },
+  {
+   "id_pedido": 44,
+   "id_produto": 9,
+   "quantidade": 1,
+   "preco_unitario": 1799.9,
+   "id_item": 86
+  },
+  {
+   "id_pedido": 45,
+   "id_produto": 20,
+   "quantidade": 1,
+   "preco_unitario": 1099.9,
+   "id_item": 87
+  },
+  {
+   "id_pedido": 46,
+   "id_produto": 17,
+   "quantidade": 2,
+   "preco_unitario": 1899.9,
+   "id_item": 88
+  },
+  {
+   "id_pedido": 47,
+   "id_produto": 15,
+   "quantidade": 1,
+   "preco_unitario": 5299,
+   "id_item": 89
+  },
+  {
+   "id_pedido": 48,
+   "id_produto": 2,
+   "quantidade": 1,
+   "preco_unitario": 2399.9,
+   "id_item": 90
+  },
+  {
+   "id_pedido": 48,
+   "id_produto": 11,
+   "quantidade": 1,
+   "preco_unitario": 6499.9,
+   "id_item": 91
+  },
+  {
+   "id_pedido": 48,
+   "id_produto": 4,
+   "quantidade": 2,
+   "preco_unitario": 749.9,
+   "id_item": 92
+  },
+  {
+   "id_pedido": 49,
+   "id_produto": 11,
+   "quantidade": 1,
+   "preco_unitario": 6499.9,
+   "id_item": 93
+  },
+  {
+   "id_pedido": 50,
+   "id_produto": 17,
+   "quantidade": 1,
+   "preco_unitario": 1899.9,
+   "id_item": 94
+  },
+  {
+   "id_pedido": 51,
+   "id_produto": 16,
+   "quantidade": 1,
+   "preco_unitario": 1199.9,
+   "id_item": 95
+  },
+  {
+   "id_pedido": 52,
+   "id_produto": 16,
+   "quantidade": 1,
+   "preco_unitario": 1199.9,
+   "id_item": 96
+  },
+  {
+   "id_pedido": 52,
+   "id_produto": 5,
+   "quantidade": 1,
+   "preco_unitario": 8999.9,
+   "id_item": 97
+  },
+  {
+   "id_pedido": 52,
+   "id_produto": 15,
+   "quantidade": 2,
+   "preco_unitario": 5299,
+   "id_item": 98
+  },
+  {
+   "id_pedido": 53,
+   "id_produto": 12,
+   "quantidade": 1,
+   "preco_unitario": 4299.9,
+   "id_item": 99
+  },
+  {
+   "id_pedido": 54,
+   "id_produto": 1,
+   "quantidade": 1,
+   "preco_unitario": 4899.9,
+   "id_item": 100
+  },
+  {
+   "id_pedido": 54,
+   "id_produto": 2,
+   "quantidade": 2,
+   "preco_unitario": 2399.9,
+   "id_item": 101
+  },
+  {
+   "id_pedido": 55,
+   "id_produto": 2,
+   "quantidade": 2,
+   "preco_unitario": 2399.9,
+   "id_item": 102
+  },
+  {
+   "id_pedido": 55,
+   "id_produto": 7,
+   "quantidade": 1,
+   "preco_unitario": 499.9,
+   "id_item": 103
+  },
+  {
+   "id_pedido": 55,
+   "id_produto": 23,
+   "quantidade": 2,
+   "preco_unitario": 599.9,
+   "id_item": 104
+  },
+  {
+   "id_pedido": 56,
+   "id_produto": 17,
+   "quantidade": 1,
+   "preco_unitario": 1899.9,
+   "id_item": 105
+  }
+ ],
+ "pagamento": [
+  {
+   "id_pedido": 1,
+   "forma": "credito",
+   "parcelas": 3,
+   "valor": 549.9,
+   "id_pagamento": 1
+  },
+  {
+   "id_pedido": 2,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 884.7,
+   "id_pagamento": 2
+  },
+  {
+   "id_pedido": 3,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 16599.7,
+   "id_pagamento": 3
+  },
+  {
+   "id_pedido": 4,
+   "forma": "credito",
+   "parcelas": 3,
+   "valor": 1099.9,
+   "id_pagamento": 4
+  },
+  {
+   "id_pedido": 5,
+   "forma": "credito",
+   "parcelas": 6,
+   "valor": 1449.8,
+   "id_pagamento": 5
+  },
+  {
+   "id_pedido": 6,
+   "forma": "credito",
+   "parcelas": 2,
+   "valor": 7599.7,
+   "id_pagamento": 6
+  },
+  {
+   "id_pedido": 7,
+   "forma": "boleto",
+   "parcelas": 1,
+   "valor": 10199.7,
+   "id_pagamento": 7
+  },
+  {
+   "id_pedido": 8,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 10289.6,
+   "id_pagamento": 8
+  },
+  {
+   "id_pedido": 9,
+   "forma": "debito",
+   "parcelas": 1,
+   "valor": 4299.9,
+   "id_pagamento": 9
+  },
+  {
+   "id_pedido": 10,
+   "forma": "debito",
+   "parcelas": 1,
+   "valor": 19599.4,
+   "id_pagamento": 10
+  },
+  {
+   "id_pedido": 11,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 2229.6,
+   "id_pagamento": 11
+  },
+  {
+   "id_pedido": 12,
+   "forma": "credito",
+   "parcelas": 1,
+   "valor": 12798.9,
+   "id_pagamento": 12
+  },
+  {
+   "id_pedido": 13,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 8699.6,
+   "id_pagamento": 13
+  },
+  {
+   "id_pedido": 14,
+   "forma": "debito",
+   "parcelas": 1,
+   "valor": 7599.6,
+   "id_pagamento": 14
+  },
+  {
+   "id_pedido": 15,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 31599.5,
+   "id_pagamento": 15
+  },
+  {
+   "id_pedido": 16,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 8999.9,
+   "id_pagamento": 16
+  },
+  {
+   "id_pedido": 17,
+   "forma": "boleto",
+   "parcelas": 1,
+   "valor": 1799.9,
+   "id_pagamento": 17
+  },
+  {
+   "id_pedido": 18,
+   "forma": "debito",
+   "parcelas": 1,
+   "valor": 5848.9,
+   "id_pagamento": 18
+  },
+  {
+   "id_pedido": 19,
+   "forma": "credito",
+   "parcelas": 4,
+   "valor": 6849.8,
+   "id_pagamento": 19
+  },
+  {
+   "id_pedido": 20,
+   "forma": "credito",
+   "parcelas": 2,
+   "valor": 1499.8,
+   "id_pagamento": 20
+  },
+  {
+   "id_pedido": 21,
+   "forma": "credito",
+   "parcelas": 2,
+   "valor": 11399.6,
+   "id_pagamento": 21
+  },
+  {
+   "id_pedido": 22,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 4499.8,
+   "id_pagamento": 22
+  },
+  {
+   "id_pedido": 23,
+   "forma": "credito",
+   "parcelas": 1,
+   "valor": 2049.7,
+   "id_pagamento": 23
+  },
+  {
+   "id_pedido": 24,
+   "forma": "credito",
+   "parcelas": 4,
+   "valor": 454.8,
+   "id_pagamento": 24
+  },
+  {
+   "id_pedido": 25,
+   "forma": "debito",
+   "parcelas": 1,
+   "valor": 1499.8,
+   "id_pagamento": 25
+  },
+  {
+   "id_pedido": 26,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 5199.8,
+   "id_pagamento": 26
+  },
+  {
+   "id_pedido": 27,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 4579.7,
+   "id_pagamento": 27
+  },
+  {
+   "id_pedido": 28,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 1799.8,
+   "id_pagamento": 28
+  },
+  {
+   "id_pedido": 29,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 6499.9,
+   "id_pagamento": 29
+  },
+  {
+   "id_pedido": 30,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 1529.7,
+   "id_pagamento": 30
+  },
+  {
+   "id_pedido": 31,
+   "forma": "credito",
+   "parcelas": 4,
+   "valor": 6099.7,
+   "id_pagamento": 31
+  },
+  {
+   "id_pedido": 32,
+   "forma": "boleto",
+   "parcelas": 1,
+   "valor": 3799.9,
+   "id_pagamento": 32
+  },
+  {
+   "id_pedido": 33,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 2249.7,
+   "id_pagamento": 33
+  },
+  {
+   "id_pedido": 34,
+   "forma": "credito",
+   "parcelas": 6,
+   "valor": 499.9,
+   "id_pagamento": 34
+  },
+  {
+   "id_pedido": 35,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 824.8,
+   "id_pagamento": 35
+  },
+  {
+   "id_pedido": 36,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 19099.6,
+   "id_pagamento": 36
+  },
+  {
+   "id_pedido": 37,
+   "forma": "credito",
+   "parcelas": 4,
+   "valor": 13899.7,
+   "id_pagamento": 37
+  },
+  {
+   "id_pedido": 38,
+   "forma": "credito",
+   "parcelas": 2,
+   "valor": 1899.9,
+   "id_pagamento": 38
+  },
+  {
+   "id_pedido": 39,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 6749.6,
+   "id_pagamento": 39
+  },
+  {
+   "id_pedido": 40,
+   "forma": "credito",
+   "parcelas": 4,
+   "valor": 5899.7,
+   "id_pagamento": 40
+  },
+  {
+   "id_pedido": 41,
+   "forma": "boleto",
+   "parcelas": 1,
+   "valor": 9088.6,
+   "id_pagamento": 41
+  },
+  {
+   "id_pedido": 42,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 2079.7,
+   "id_pagamento": 42
+  },
+  {
+   "id_pedido": 43,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 17999.8,
+   "id_pagamento": 43
+  },
+  {
+   "id_pedido": 44,
+   "forma": "debito",
+   "parcelas": 1,
+   "valor": 1799.9,
+   "id_pagamento": 44
+  },
+  {
+   "id_pedido": 45,
+   "forma": "credito",
+   "parcelas": 3,
+   "valor": 1099.9,
+   "id_pagamento": 45
+  },
+  {
+   "id_pedido": 46,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 3799.8,
+   "id_pagamento": 46
+  },
+  {
+   "id_pedido": 47,
+   "forma": "credito",
+   "parcelas": 4,
+   "valor": 5299,
+   "id_pagamento": 47
+  },
+  {
+   "id_pedido": 48,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 10399.6,
+   "id_pagamento": 48
+  },
+  {
+   "id_pedido": 49,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 6499.9,
+   "id_pagamento": 49
+  },
+  {
+   "id_pedido": 50,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 1899.9,
+   "id_pagamento": 50
+  },
+  {
+   "id_pedido": 51,
+   "forma": "boleto",
+   "parcelas": 1,
+   "valor": 1199.9,
+   "id_pagamento": 51
+  },
+  {
+   "id_pedido": 52,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 20797.8,
+   "id_pagamento": 52
+  },
+  {
+   "id_pedido": 53,
+   "forma": "credito",
+   "parcelas": 1,
+   "valor": 4299.9,
+   "id_pagamento": 53
+  },
+  {
+   "id_pedido": 54,
+   "forma": "boleto",
+   "parcelas": 1,
+   "valor": 9699.7,
+   "id_pagamento": 54
+  },
+  {
+   "id_pedido": 55,
+   "forma": "pix",
+   "parcelas": 1,
+   "valor": 6499.5,
+   "id_pagamento": 55
+  },
+  {
+   "id_pedido": 56,
+   "forma": "debito",
+   "parcelas": 1,
+   "valor": 1899.9,
+   "id_pagamento": 56
+  }
+ ]
+}

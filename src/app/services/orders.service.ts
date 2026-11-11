@@ -1,92 +1,88 @@
-import { Injectable, NgZone, signal } from '@angular/core';
-import { Observable, shareReplay } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
-  collection, addDoc, updateDoc, doc,
-  onSnapshot, query, orderBy, serverTimestamp, Timestamp
-} from 'firebase/firestore';
-import { firestore } from '../core/firebase/firebase.config';
-import { Order, OrderStatus, CartItem } from '../models';
+  EMPTY, Observable, Subject, catchError, firstValueFrom, map, merge, shareReplay, switchMap, tap, timer,
+} from 'rxjs';
+import { environment } from '../../environments/environment';
+import { CartItem, Customer, Order, OrderStatus, PaymentMethod } from '../models';
+import { MudarStatusRequest, NovoPedidoRequest, PedidoApi } from '../core/api/api.types';
+import { orderFromApi, paymentToApi, statusToApi } from '../core/api/mappers';
+
+export interface NewOrderData {
+  items: CartItem[];
+  customer: Customer & { email: string };
+  payment: { method: PaymentMethod; installments: number };
+  observations?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class OrdersService {
-  private _orders = signal<Order[]>([]);
+  private http = inject(HttpClient);
+  private base = `${environment.apiUrl}/pedidos`;
 
-  // Signal — para componentes modernos
+  private _orders = signal<Order[]>([]);
   readonly orders$ = this._orders.asReadonly();
 
-  constructor(private ngZone: NgZone) {}
+  /** Força uma atualização imediata (após mudar status, por exemplo). */
+  private refresh$ = new Subject<void>();
 
-  // Observable compartilhado (hot) — um único listener Firestore para todos os subscribers.
-  // O listener roda fora da zona do Angular para evitar que reconexões do Firestore
-  // disparem change detection desnecessariamente; os dados voltam para a zona via ngZone.run().
-  readonly orders: Observable<Order[]> = new Observable<Order[]>(subscriber => {
-    const q = query(
-      collection(firestore, 'orders'),
-      orderBy('createdAt', 'desc')
-    );
-
-    const unsubscribe = this.ngZone.runOutsideAngular(() =>
-      onSnapshot(q, (snapshot) => {
-        const orders = snapshot.docs.map(d => {
-          const data = d.data();
-          return {
-            ...data,
-            id: d.id,
-            createdAt: data['createdAt'] instanceof Timestamp
-              ? data['createdAt'].toDate()
-              : new Date(data['createdAt'] ?? Date.now()),
-          } as Order;
-        });
-        this.ngZone.run(() => {
-          this._orders.set(orders);
-          subscriber.next(orders);
-        });
-      }, err => this.ngZone.run(() => subscriber.error(err)))
-    );
-
-    return () => unsubscribe();
-  }).pipe(shareReplay({ bufferSize: 1, refCount: true }));
+  /**
+   * Lista de pedidos para os painéis (exige login).
+   * Substitui o onSnapshot do Firebase: consulta a API a cada `pollingMs` e
+   * compartilha uma única consulta entre todos os componentes inscritos.
+   */
+  readonly orders: Observable<Order[]> = merge(timer(0, environment.pollingMs), this.refresh$).pipe(
+    switchMap(() => this.http.get<PedidoApi[]>(this.base).pipe(
+      catchError(err => { console.error('[OrdersService] erro ao buscar pedidos:', err); return EMPTY; }),
+    )),
+    map(list => list.map(orderFromApi).sort((a, b) => +b.createdAt - +a.createdAt)),
+    tap(list => this._orders.set(list)),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
 
   getOrders(): Order[] { return this._orders(); }
-  getMyOrders(uid?: string): Order[] {
-    return this._orders().filter(o => o.isLocal || o.customerUid === uid);
+
+  /** Pedidos de um cliente (público, sem login) — tela "Meus pedidos". */
+  customerOrders(phone: string): Observable<Order[]> {
+    const params = new HttpParams().set('telefone', phone);
+    return timer(0, environment.pollingMs).pipe(
+      switchMap(() => this.http.get<PedidoApi[]>(`${this.base}/cliente`, { params }).pipe(
+        catchError(err => { console.error('[OrdersService] erro ao buscar meus pedidos:', err); return EMPTY; }),
+      )),
+      map(list => list.map(orderFromApi).sort((a, b) => +b.createdAt - +a.createdAt)),
+    );
   }
 
-  async addOrder(data: {
-    items: CartItem[];
-    customer: Order['customer'];
-    paymentMethod: string;
-    total: number;
-    deliveryFee: number;
-    observations?: string;
-    customerUid?: string;
-  }): Promise<Order> {
-    const orders = this._orders();
-    const orderNumber = (orders.length + 1).toString().padStart(4, '0');
-
-    const newOrder = {
-      ...data,
-      orderNumber,
-      status: 'pending' as OrderStatus,
-      orderType: 'delivery' as const,
-      isLocal: true,
-      createdAt: serverTimestamp(),
+  /**
+   * Cria o pedido. Preço, frete, total e número são calculados pela API;
+   * se faltar estoque a API responde 409 com { mensagem }.
+   */
+  async addOrder(data: NewOrderData): Promise<Order> {
+    const body: NovoPedidoRequest = {
+      cliente: {
+        nome:     data.customer.name,
+        email:    data.customer.email,
+        telefone: data.customer.phone,
+        endereco: data.customer.address,
+      },
+      itens:       data.items.map(i => ({ idProduto: Number(i.id), quantidade: i.quantity })),
+      pagamento:   { forma: paymentToApi(data.payment.method), parcelas: data.payment.installments },
+      tipoEntrega: 'entrega',
+      observacoes: data.observations?.trim() || null,
     };
-
-    const ref = await addDoc(collection(firestore, 'orders'), newOrder);
-
-    return {
-      ...newOrder,
-      id: ref.id,
-      createdAt: new Date(),
-    } as Order;
+    const created = await firstValueFrom(this.http.post<PedidoApi>(this.base, body));
+    return orderFromApi(created);
   }
 
-  async updateStatus(orderId: string, status: OrderStatus): Promise<void> {
-    await updateDoc(doc(firestore, 'orders', orderId), { status });
-  }
-
-  async assignDelivery(orderId: string, deliveryPersonId: string): Promise<void> {
-    await updateDoc(doc(firestore, 'orders', orderId), { deliveryPersonId });
+  async updateStatus(
+    orderId: string,
+    status: OrderStatus,
+    extra: { cancelReason?: string; deliveryPersonId?: string } = {},
+  ): Promise<void> {
+    const body: MudarStatusRequest = { status: statusToApi(status) };
+    if (extra.cancelReason)     body.motivoCancelamento = extra.cancelReason;
+    if (extra.deliveryPersonId) body.idEntregador = Number(extra.deliveryPersonId);
+    await firstValueFrom(this.http.patch(`${this.base}/${orderId}/status`, body));
+    this.refresh$.next();
   }
 }

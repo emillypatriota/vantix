@@ -3,11 +3,14 @@ import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OrdersService } from '../../../services/orders.service';
+import { ToastService } from '../../../services/toast.service';
+import { apiErrorMessage } from '../../../core/api/auth.interceptor';
 import { Order, OrderStatus, STATUS_CONFIG } from '../../../models';
 
 const TABS: { label: string; value: OrderStatus | 'all' }[] = [
   { label: 'Todos',      value: 'all' },
   { label: 'Aguardando', value: 'pending' },
+  { label: 'Pagos',      value: 'confirmed' },
   { label: 'Em separação', value: 'preparing' },
   { label: 'Prontos',    value: 'ready' },
   { label: 'A Caminho',  value: 'delivering' },
@@ -16,7 +19,7 @@ const TABS: { label: string; value: OrderStatus | 'all' }[] = [
 ];
 
 const NEXT_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
-  pending:    'preparing',
+  pending:    'confirmed',
   confirmed:  'preparing',
   preparing:  'ready',
   ready:      'delivering',
@@ -36,13 +39,13 @@ const NEXT_LABEL: Partial<Record<OrderStatus, string>> = {
   standalone: true,
   imports: [NgFor, NgIf, DatePipe, FormsModule],
   template: `
-    <div style="padding:2rem 2rem 4rem">
+    <div class="orders-page">
 
       <!-- Header -->
       <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.75rem">
         <div>
           <h1 style="font-family:var(--font-serif);font-size:1.875rem;color:var(--text-primary)">Gestão de Pedidos</h1>
-          <p style="font-size:.82rem;color:var(--text-muted);margin-top:.25rem">Atualizações em tempo real via Firebase</p>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-top:.25rem">Atualização automática a cada 5 segundos</p>
         </div>
         <div style="display:flex;align-items:center;gap:.5rem;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-full);padding:.5rem 1rem;font-size:.78rem;color:var(--text-muted)">
           <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite"></span>
@@ -163,7 +166,7 @@ const NEXT_LABEL: Partial<Record<OrderStatus, string>> = {
                 </button>
               </div>
               <span style="font-size:.7rem;color:var(--text-muted)">
-                {{ order.estimatedTime ? '⏱ ' + order.estimatedTime + ' min' : '' }}
+                {{ order.estimatedTime ? '⏱ ' + order.estimatedTime + ' dias úteis' : '' }}
               </span>
             </div>
           </div>
@@ -173,6 +176,8 @@ const NEXT_LABEL: Partial<Record<OrderStatus, string>> = {
   `,
   styles: [`
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .orders-page { padding: 2rem 2rem 4rem; }
+    @media (max-width: 640px) { .orders-page { padding: .5rem 0 3rem; } }
     .order-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.12); }
     .status-pill {
       padding:.2rem .65rem; border-radius: var(--r-full);
@@ -218,7 +223,7 @@ export class OrdersManagementComponent implements OnInit, OnDestroy {
     return list;
   });
 
-  constructor(private ordersService: OrdersService) {}
+  constructor(private ordersService: OrdersService, private toast: ToastService) {}
 
   ngOnInit() {
     this.sub = this.ordersService.orders.subscribe({
@@ -245,13 +250,20 @@ export class OrdersManagementComponent implements OnInit, OnDestroy {
     if (!next || this.updating) return;
     this.updating = order.id;
     try { await this.ordersService.updateStatus(order.id, next); }
+    catch (err) { this.toast.show(apiErrorMessage(err, 'Não foi possível atualizar o pedido.'), 'error'); }
     finally { this.updating = null; }
   }
 
   async cancel(order: Order) {
     if (this.updating) return;
+    const reason = prompt(`Motivo do cancelamento do pedido #${order.orderNumber}:`, 'Desistência do cliente');
+    if (reason === null) return;
     this.updating = order.id;
-    try { await this.ordersService.updateStatus(order.id, 'cancelled'); }
+    try {
+      await this.ordersService.updateStatus(order.id, 'cancelled', { cancelReason: reason.trim() || 'Cancelado pelo gerente' });
+      this.toast.show(`Pedido #${order.orderNumber} cancelado`);
+    }
+    catch (err) { this.toast.show(apiErrorMessage(err, 'Não foi possível cancelar o pedido.'), 'error'); }
     finally { this.updating = null; }
   }
 }

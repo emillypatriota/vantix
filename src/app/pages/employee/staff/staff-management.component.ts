@@ -1,57 +1,27 @@
-import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { Component, OnInit, signal, computed } from '@angular/core';
+import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  collection, addDoc, updateDoc, deleteDoc, doc,
-  onSnapshot, query, orderBy, serverTimestamp
-} from 'firebase/firestore';
-import { firestore } from '../../../core/firebase/firebase.config';
 import { ToastService } from '../../../services/toast.service';
+import { AuthService } from '../../../services/auth.service';
+import { StaffForm, StaffMember, StaffRole, StaffService } from '../../../services/staff.service';
+import { apiErrorMessage } from '../../../core/api/auth.interceptor';
 
-// 'cashier' = Atendimento/SAC · 'waiter' = Vendas (ids mantidos da versão anterior)
-type StaffRole = 'manager' | 'kitchen' | 'delivery' | 'cashier' | 'waiter';
-type StaffStatus = 'active' | 'inactive' | 'on_leave';
-
-interface StaffMember {
-  id: string;
-  name: string;
-  role: StaffRole;
-  phone: string;
-  email: string;
-  status: StaffStatus;
-  schedule: string;
-  hireDate: string;
-  notes?: string;
-  createdAt?: any;
-}
-
+// Usuários que acessam os painéis (tabela usuario_painel do MySQL).
 const ROLE_CONFIG: Record<StaffRole, { label: string; color: string; bg: string; icon: string }> = {
-  manager:  { label: 'Gerente',    color: '#3a6ff0', bg: 'rgba(58,111,240,.12)', icon: '👑' },
-  kitchen:  { label: 'Estoque',    color: '#38bdf8', bg: 'rgba(56,189,248,.12)', icon: '📦' },
-  delivery: { label: 'Logística',  color: '#2dd4bf', bg: 'rgba(45,212,191,.12)', icon: '🚚' },
-  cashier:  { label: 'Atendimento', color: '#a78bfa', bg: 'rgba(167,139,250,.12)', icon: '🎧' },
-  waiter:   { label: 'Vendas',     color: '#f472b6', bg: 'rgba(244,114,182,.12)', icon: '🛒' },
+  manager:  { label: 'Gerente',   color: '#3a6ff0', bg: 'rgba(58,111,240,.12)', icon: '👑' },
+  kitchen:  { label: 'Estoque',   color: '#38bdf8', bg: 'rgba(56,189,248,.12)', icon: '📦' },
+  delivery: { label: 'Logística', color: '#2dd4bf', bg: 'rgba(45,212,191,.12)', icon: '🚚' },
 };
 
-const STATUS_CONFIG: Record<StaffStatus, { label: string; color: string; bg: string }> = {
-  active:   { label: 'Ativo',    color: '#22c55e', bg: 'rgba(34,197,94,.12)'  },
-  inactive: { label: 'Inativo',  color: '#64748b', bg: 'rgba(100,116,139,.12)' },
-  on_leave: { label: 'Licença',  color: '#3a6ff0', bg: 'rgba(58,111,240,.12)' },
+const STATUS_CONFIG = {
+  active:   { label: 'Ativo',   color: '#22c55e', bg: 'rgba(34,197,94,.12)'  },
+  inactive: { label: 'Inativo', color: '#64748b', bg: 'rgba(100,116,139,.12)' },
 };
-
-const SEED_STAFF: Omit<StaffMember, 'id'>[] = [
-  { name: 'Roberto Silva',   role: 'manager',  phone: '(11) 98765-4321', email: 'gerente@voltz.com',    status: 'active',   schedule: 'Seg–Sex 09h–18h', hireDate: '2022-03-01' },
-  { name: 'Ana Souza',       role: 'kitchen',  phone: '(11) 97654-3210', email: 'ana.souza@voltz.com',  status: 'active',   schedule: 'Ter–Dom 12h–21h', hireDate: '2022-06-15' },
-  { name: 'Carlos Mendes',   role: 'delivery', phone: '(11) 96543-2109', email: 'logistica@voltz.com', status: 'active',   schedule: 'Seg–Sáb 08h–17h', hireDate: '2023-01-10' },
-  { name: 'Fernanda Lima',   role: 'cashier',  phone: '(11) 95432-1098', email: 'f.lima@voltz.com',     status: 'active',   schedule: 'Seg–Sex 11h–20h', hireDate: '2023-04-20' },
-  { name: 'Paulo Ferreira',  role: 'waiter',   phone: '(11) 94321-0987', email: 'p.ferreira@voltz.com', status: 'active',   schedule: 'Seg–Sex 09h–18h', hireDate: '2023-07-05' },
-  { name: 'Mariana Costa',   role: 'kitchen',  phone: '(11) 93210-9876', email: 'm.costa@voltz.com',    status: 'on_leave', schedule: 'Seg–Sex 08h–17h', hireDate: '2022-09-12' },
-];
 
 @Component({
   selector: 'app-staff-management',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule],
+  imports: [NgFor, NgIf, FormsModule, DatePipe],
   template: `
     <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem 4rem">
 
@@ -60,7 +30,7 @@ const SEED_STAFF: Omit<StaffMember, 'id'>[] = [
         <div>
           <h1 style="font-family:var(--font-display);font-size:1.875rem;color:var(--text-primary)">Funcionários</h1>
           <p style="color:var(--text-tertiary);font-size:var(--text-base);margin-top:.25rem">
-            {{ activeCount }} ativos · {{ staff().length }} no total
+            {{ activeCount }} ativos · {{ staff().length }} com acesso aos painéis
           </p>
         </div>
         <button (click)="openModal()" class="btn btn-primary" style="display:flex;align-items:center;gap:.5rem">
@@ -82,12 +52,12 @@ const SEED_STAFF: Omit<StaffMember, 'id'>[] = [
       <div style="display:flex;gap:.875rem;flex-wrap:wrap;margin-bottom:1.25rem">
         <div style="position:relative;flex:1;min-width:200px">
           <svg style="position:absolute;left:.875rem;top:50%;transform:translateY(-50%);color:var(--text-muted)" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="text" placeholder="Buscar por nome, cargo ou telefone..."
+          <input type="text" placeholder="Buscar por nome ou e-mail..."
             [value]="search()" (input)="search.set($any($event.target).value)"
             style="width:100%;padding:.625rem .875rem .625rem 2.375rem;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-lg);color:var(--text-primary);font-size:.82rem;outline:none">
         </div>
 
-        <div style="display:flex;gap:.375rem">
+        <div style="display:flex;gap:.375rem;flex-wrap:wrap">
           <button *ngFor="let f of roleFilters"
             (click)="activeRole.set(f.value)"
             [style.background]="activeRole()===f.value ? 'var(--brand-600)' : 'var(--surface-1)'"
@@ -99,23 +69,25 @@ const SEED_STAFF: Omit<StaffMember, 'id'>[] = [
         </div>
       </div>
 
+      <div *ngIf="loading()" style="text-align:center;padding:3rem;color:var(--text-muted)">Carregando funcionários...</div>
+
       <!-- Staff grid -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.125rem">
+      <div *ngIf="!loading()" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.125rem">
         <div *ngFor="let member of filtered()" class="staff-card"
              style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:all .2s">
 
-          <!-- Color top bar -->
           <div style="height:3px" [style.background]="roleCfg(member.role).color"></div>
 
           <div style="padding:1.25rem">
-            <!-- Avatar + name -->
             <div style="display:flex;align-items:flex-start;gap:.875rem;margin-bottom:1rem">
               <div style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.125rem;flex-shrink:0"
                    [style.background]="roleCfg(member.role).bg">
                 {{ roleCfg(member.role).icon }}
               </div>
               <div style="flex:1;min-width:0">
-                <div style="font-weight:700;font-size:var(--text-base);color:var(--text-primary);margin-bottom:.25rem">{{ member.name }}</div>
+                <div style="font-weight:700;font-size:var(--text-base);color:var(--text-primary);margin-bottom:.25rem">
+                  {{ member.name }} <span *ngIf="isMe(member)" style="font-size:.68rem;color:var(--text-muted);font-weight:500">(você)</span>
+                </div>
                 <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
                   <span style="font-size:.68rem;font-weight:600;padding:.15rem .55rem;border-radius:var(--r-full)"
                         [style.background]="roleCfg(member.role).bg"
@@ -123,61 +95,40 @@ const SEED_STAFF: Omit<StaffMember, 'id'>[] = [
                     {{ roleCfg(member.role).label }}
                   </span>
                   <span style="font-size:.68rem;font-weight:600;padding:.15rem .55rem;border-radius:var(--r-full)"
-                        [style.background]="statusCfg(member.status).bg"
-                        [style.color]="statusCfg(member.status).color">
-                    {{ statusCfg(member.status).label }}
+                        [style.background]="statusCfg(member).bg"
+                        [style.color]="statusCfg(member).color">
+                    {{ statusCfg(member).label }}
                   </span>
                 </div>
               </div>
             </div>
 
-            <!-- Info rows -->
             <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.125rem">
-              <div style="display:flex;align-items:center;gap:.5rem;font-size:var(--text-sm);color:var(--text-secondary)">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;color:var(--text-muted)"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.22 2.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.46-.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-                {{ member.phone }}
-              </div>
-              <div style="display:flex;align-items:center;gap:.5rem;font-size:var(--text-sm);color:var(--text-secondary)">
+              <div style="display:flex;align-items:center;gap:.5rem;font-size:var(--text-sm);color:var(--text-secondary);overflow:hidden">
                 <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;color:var(--text-muted)"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                {{ member.email }}
+                <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ member.email }}</span>
               </div>
-              <div style="display:flex;align-items:center;gap:.5rem;font-size:var(--text-sm);color:var(--text-secondary)">
+              <div *ngIf="member.createdAt" style="display:flex;align-items:center;gap:.5rem;font-size:var(--text-sm);color:var(--text-secondary)">
                 <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;color:var(--text-muted)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                {{ member.schedule }}
+                Cadastrado em {{ member.createdAt | date:'dd/MM/yyyy' }}
               </div>
             </div>
 
-            <!-- Actions -->
             <div style="display:flex;gap:.5rem">
-              <button (click)="openModal(member)"
-                style="flex:1;padding:.5rem;background:var(--surface-2,rgba(255,255,255,.04));border:1px solid var(--border);border-radius:var(--r-lg);color:var(--text-secondary);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .15s"
-                onmouseenter="this.style.borderColor='var(--border-strong)';this.style.color='var(--text-primary)'"
-                onmouseleave="this.style.borderColor='';this.style.color=''">
-                Editar
-              </button>
-              <button (click)="toggleStatus(member)"
-                style="flex:1;padding:.5rem;background:var(--surface-2,rgba(255,255,255,.04));border:1px solid var(--border);border-radius:var(--r-lg);color:var(--text-secondary);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .15s"
-                onmouseenter="this.style.borderColor='var(--border-strong)';this.style.color='var(--text-primary)'"
-                onmouseleave="this.style.borderColor='';this.style.color=''">
-                {{ member.status === 'active' ? 'Desativar' : 'Ativar' }}
-              </button>
-              <button (click)="remove(member.id)"
-                style="width:2.25rem;background:var(--surface-2,rgba(255,255,255,.04));border:1px solid var(--border);border-radius:var(--r-lg);color:var(--text-muted);font-size:.8rem;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center"
-                onmouseenter="this.style.borderColor='#ef4444';this.style.color='#ef4444'"
-                onmouseleave="this.style.borderColor='';this.style.color=''">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              <button (click)="openModal(member)" class="staff-btn">Editar</button>
+              <button (click)="toggleStatus(member)" class="staff-btn" [disabled]="isMe(member)"
+                      [title]="isMe(member) ? 'Você não pode desativar o próprio usuário' : ''">
+                {{ member.active ? 'Desativar' : 'Ativar' }}
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Empty state -->
         <div *ngIf="filtered().length === 0" style="grid-column:1/-1;text-align:center;padding:4rem 2rem;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-2xl)">
           <div style="font-size:3rem;margin-bottom:1rem">👥</div>
           <p style="color:var(--text-muted)">Nenhum funcionário encontrado</p>
         </div>
       </div>
-
     </div>
 
     <!-- Modal -->
@@ -192,58 +143,41 @@ const SEED_STAFF: Omit<StaffMember, 'id'>[] = [
         </div>
 
         <div style="padding:0 1.5rem 1.5rem;display:flex;flex-direction:column;gap:1rem">
-
           <div class="form-group">
             <label class="form-label">Nome completo *</label>
             <input class="form-input" [(ngModel)]="form.name" placeholder="Ex: João Silva">
           </div>
 
+          <div class="form-group">
+            <label class="form-label">E-mail de login *</label>
+            <input class="form-input" [(ngModel)]="form.email" type="email" placeholder="colaborador@voltz.com">
+          </div>
+
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
             <div class="form-group">
-              <label class="form-label">Cargo *</label>
+              <label class="form-label">Papel *</label>
               <select class="form-input" [(ngModel)]="form.role">
                 <option value="manager">Gerente</option>
                 <option value="kitchen">Estoque</option>
                 <option value="delivery">Logística</option>
-                <option value="cashier">Atendimento</option>
-                <option value="waiter">Vendas</option>
               </select>
             </div>
             <div class="form-group">
               <label class="form-label">Status</label>
-              <select class="form-input" [(ngModel)]="form.status">
-                <option value="active">Ativo</option>
-                <option value="inactive">Inativo</option>
-                <option value="on_leave">Licença</option>
+              <select class="form-input" [(ngModel)]="form.active">
+                <option [ngValue]="true">Ativo</option>
+                <option [ngValue]="false">Inativo</option>
               </select>
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-            <div class="form-group">
-              <label class="form-label">Telefone</label>
-              <input class="form-input" [(ngModel)]="form.phone" placeholder="(11) 99999-9999">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Data de admissão</label>
-              <input class="form-input" [(ngModel)]="form.hireDate" type="date">
-            </div>
+          <div class="form-group">
+            <label class="form-label">{{ editingId ? 'Nova senha (deixe em branco para manter)' : 'Senha *' }}</label>
+            <input class="form-input" [(ngModel)]="form.password" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
+            <p class="form-hint">A senha é guardada com hash (BCrypt) no banco.</p>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">E-mail</label>
-            <input class="form-input" [(ngModel)]="form.email" type="email" placeholder="colaborador@voltz.com">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Escala / Horário</label>
-            <input class="form-input" [(ngModel)]="form.schedule" placeholder="Ex: Seg–Sex 09h–18h">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Observações</label>
-            <textarea class="form-input" [(ngModel)]="form.notes" rows="2" placeholder="Informações adicionais..."></textarea>
-          </div>
+          <p *ngIf="formError" style="font-size:.8rem;color:var(--danger-text)">{{ formError }}</p>
 
           <div style="display:flex;gap:.75rem;padding-top:.5rem">
             <button (click)="closeModal()" class="btn btn-outline" style="flex:1">Cancelar</button>
@@ -251,83 +185,72 @@ const SEED_STAFF: Omit<StaffMember, 'id'>[] = [
               {{ saving ? 'Salvando...' : (editingId ? 'Salvar Alterações' : 'Adicionar') }}
             </button>
           </div>
-
         </div>
       </div>
     </div>
   `,
   styles: [`
     .staff-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.12); transform: translateY(-2px); }
+    .staff-btn { flex:1; padding:.5rem; background:var(--surface-2,rgba(255,255,255,.04)); border:1px solid var(--border); border-radius:var(--r-lg); color:var(--text-secondary); font-size:.75rem; font-weight:500; cursor:pointer; transition:all .15s; }
+    .staff-btn:hover:not(:disabled) { border-color:var(--border-strong); color:var(--text-primary); }
+    .staff-btn:disabled { opacity:.45; cursor:not-allowed; }
   `]
 })
-export class StaffManagementComponent implements OnInit, OnDestroy {
+export class StaffManagementComponent implements OnInit {
   staff = signal<StaffMember[]>([]);
+  loading = signal(true);
   search = signal('');
   activeRole = signal<StaffRole | 'all'>('all');
   modalOpen = signal(false);
   saving = false;
+  formError = '';
   editingId: string | null = null;
-  private unsubStaff?: () => void;
 
-  form: Omit<StaffMember, 'id'> = this.emptyForm();
+  form: StaffForm = this.emptyForm();
 
   roleFilters = [
-    { label: 'Todos',      value: 'all'      as StaffRole | 'all' },
-    { label: 'Gerente',    value: 'manager'  as StaffRole | 'all' },
-    { label: 'Estoque',    value: 'kitchen'  as StaffRole | 'all' },
-    { label: 'Logística',  value: 'delivery' as StaffRole | 'all' },
-    { label: 'Atendimento', value: 'cashier'  as StaffRole | 'all' },
-    { label: 'Vendas',     value: 'waiter'   as StaffRole | 'all' },
+    { label: 'Todos',     value: 'all'      as StaffRole | 'all' },
+    { label: 'Gerente',   value: 'manager'  as StaffRole | 'all' },
+    { label: 'Estoque',   value: 'kitchen'  as StaffRole | 'all' },
+    { label: 'Logística', value: 'delivery' as StaffRole | 'all' },
   ];
 
   filtered = computed(() => {
     let list = this.staff();
     if (this.activeRole() !== 'all') list = list.filter(m => m.role === this.activeRole());
     const q = this.search().toLowerCase().trim();
-    if (q) list = list.filter(m =>
-      m.name.toLowerCase().includes(q) ||
-      m.phone.includes(q) ||
-      m.email.toLowerCase().includes(q)
-    );
+    if (q) list = list.filter(m => m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q));
     return list;
   });
 
-  get activeCount() { return this.staff().filter(m => m.status === 'active').length; }
+  get activeCount() { return this.staff().filter(m => m.active).length; }
 
   get roleKpis() {
-    return Object.entries(ROLE_CONFIG).map(([role, cfg]) => ({
+    return (Object.entries(ROLE_CONFIG) as [StaffRole, typeof ROLE_CONFIG[StaffRole]][]).map(([role, cfg]) => ({
       icon: cfg.icon, label: cfg.label,
       count: this.staff().filter(m => m.role === role).length,
     }));
   }
 
-  constructor(private toast: ToastService) {}
+  constructor(private staffService: StaffService, private auth: AuthService, private toast: ToastService) {}
 
-  ngOnInit() {
-    const q = query(collection(firestore, 'staff'), orderBy('name'));
-    this.unsubStaff = onSnapshot(q, async snapshot => {
-      if (snapshot.empty) { await this.seed(); return; }
-      this.staff.set(snapshot.docs.map(d => ({ id: d.id, ...d.data() } as StaffMember)));
-    }, err => console.error('[StaffManagement] Firestore error:', err));
+  ngOnInit() { this.load(); }
+
+  private async load() {
+    try { this.staff.set(await this.staffService.list()); }
+    catch (err) { this.toast.show(apiErrorMessage(err, 'Erro ao carregar funcionários.'), 'error'); }
+    finally { this.loading.set(false); }
   }
 
-  ngOnDestroy() {
-    this.unsubStaff?.();
-  }
-
-  private async seed() {
-    for (const member of SEED_STAFF) {
-      await addDoc(collection(firestore, 'staff'), { ...member, createdAt: serverTimestamp() });
-    }
-  }
-
-  roleCfg(role: StaffRole)     { return ROLE_CONFIG[role]   ?? ROLE_CONFIG.waiter; }
-  statusCfg(status: StaffStatus) { return STATUS_CONFIG[status] ?? STATUS_CONFIG.inactive; }
+  isMe(m: StaffMember)        { return m.id === this.auth.getUser()?.uid; }
+  roleCfg(role: StaffRole)    { return ROLE_CONFIG[role] ?? ROLE_CONFIG.kitchen; }
+  statusCfg(m: StaffMember)   { return m.active ? STATUS_CONFIG.active : STATUS_CONFIG.inactive; }
 
   openModal(member?: StaffMember) {
     this.editingId = member?.id ?? null;
+    this.formError = '';
     this.form = member
-      ? { name: member.name, role: member.role, phone: member.phone, email: member.email, status: member.status, schedule: member.schedule, hireDate: member.hireDate, notes: member.notes }
+      ? { name: member.name, email: member.email, role: member.role, active: member.active, password: '' }
       : this.emptyForm();
     this.modalOpen.set(true);
   }
@@ -335,34 +258,42 @@ export class StaffManagementComponent implements OnInit, OnDestroy {
   closeModal() { this.modalOpen.set(false); }
 
   async save() {
-    if (!this.form.name.trim()) { this.toast.show('Nome é obrigatório', 'error'); return; }
+    if (!this.form.name.trim())  { this.formError = 'Nome é obrigatório.'; return; }
+    if (!/^\S+@\S+\.\S+$/.test(this.form.email.trim())) { this.formError = 'Informe um e-mail válido.'; return; }
+    if (!this.editingId && this.form.password.length < 6) { this.formError = 'A senha precisa ter pelo menos 6 caracteres.'; return; }
+    if (this.editingId && this.form.password && this.form.password.length < 6) { this.formError = 'A nova senha precisa ter pelo menos 6 caracteres.'; return; }
+
     this.saving = true;
+    this.formError = '';
     try {
       if (this.editingId) {
-        await updateDoc(doc(firestore, 'staff', this.editingId), { ...this.form });
+        await this.staffService.update(this.editingId, this.form);
         this.toast.show('Funcionário atualizado!');
       } else {
-        await addDoc(collection(firestore, 'staff'), { ...this.form, createdAt: serverTimestamp() });
+        await this.staffService.create(this.form);
         this.toast.show('Funcionário adicionado!');
       }
       this.closeModal();
-    } catch { this.toast.show('Erro ao salvar. Tente novamente.', 'error'); }
-    finally { this.saving = false; }
+      await this.load();
+    } catch (err) {
+      this.formError = apiErrorMessage(err, 'Erro ao salvar. Tente novamente.');
+    } finally {
+      this.saving = false;
+    }
   }
 
   async toggleStatus(member: StaffMember) {
-    const next: StaffStatus = member.status === 'active' ? 'inactive' : 'active';
-    await updateDoc(doc(firestore, 'staff', member.id), { status: next });
-    this.toast.show(next === 'active' ? `${member.name} ativado` : `${member.name} desativado`);
+    const next = !member.active;
+    try {
+      await this.staffService.setActive(member.id, next);
+      this.toast.show(next ? `${member.name} ativado` : `${member.name} desativado`);
+      await this.load();
+    } catch (err) {
+      this.toast.show(apiErrorMessage(err, 'Não foi possível alterar o status.'), 'error');
+    }
   }
 
-  async remove(id: string) {
-    if (!confirm('Remover este funcionário?')) return;
-    await deleteDoc(doc(firestore, 'staff', id));
-    this.toast.show('Funcionário removido');
-  }
-
-  private emptyForm(): Omit<StaffMember, 'id'> {
-    return { name: '', role: 'waiter', phone: '', email: '', status: 'active', schedule: '', hireDate: '', notes: '' };
+  private emptyForm(): StaffForm {
+    return { name: '', email: '', role: 'kitchen', active: true, password: '' };
   }
 }

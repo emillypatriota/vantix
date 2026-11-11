@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { OrdersService } from '../../../services/orders.service';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../services/toast.service';
+import { apiErrorMessage } from '../../../core/api/auth.interceptor';
 import { Order } from '../../../models';
 
 @Component({
@@ -26,7 +27,7 @@ import { Order } from '../../../models';
         </div>
 
         <!-- Earnings strip -->
-        <div class="card" style="display:flex;gap:0;overflow:hidden;flex-shrink:0">
+        <div class="card earnings-strip">
           <div style="padding:1rem 1.5rem;text-align:center;border-right:1px solid var(--border)">
             <div style="font-size:var(--text-xs);color:var(--text-tertiary);letter-spacing:.08em;margin-bottom:.25rem;text-transform:uppercase">Valor entregue hoje</div>
             <div style="font-family:var(--font-display);font-size:1.375rem;color:var(--success-text);font-weight:700">
@@ -225,7 +226,12 @@ import { Order } from '../../../models';
       </div>
 
     </div>
-  `
+  `,
+  styles: [`
+    .earnings-strip { display:flex; gap:0; overflow:hidden; flex-shrink:0; }
+    .earnings-strip > div { white-space:nowrap; }
+    @media (max-width:640px) { .earnings-strip { width:100%; } .earnings-strip > div { flex:1; min-width:0; white-space:normal; padding:.75rem .5rem !important; } }
+  `],
 })
 export class DeliveryDashboardComponent implements OnInit, OnDestroy {
   available: Order[] = [];
@@ -243,7 +249,13 @@ export class DeliveryDashboardComponent implements OnInit, OnDestroy {
     ];
   }
 
-  get earnings() { return this.completed.reduce((s, o) => s + (o.total ?? 0), 0); }
+  /** Soma só as entregas concluídas hoje (pela data da última atualização do pedido). */
+  get earnings() {
+    const today = new Date().toDateString();
+    return this.completed
+      .filter(o => (o.updatedAt ?? o.createdAt).toDateString() === today)
+      .reduce((s, o) => s + (o.total ?? 0), 0);
+  }
 
   constructor(
     private ordersService: OrdersService,
@@ -252,7 +264,7 @@ export class DeliveryDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.deliveryUid = this.auth.getUser()?.uid ?? 'logistica-1';
+    this.deliveryUid = this.auth.getUser()?.uid ?? '';
     this.sub = this.ordersService.orders.subscribe({
       next: orders => {
         this.available = orders.filter(o =>
@@ -274,15 +286,18 @@ export class DeliveryDashboardComponent implements OnInit, OnDestroy {
   trackById(_: number, o: Order) { return o.id; }
 
   async accept(order: Order) {
-    await this.ordersService.assignDelivery(order.id, this.deliveryUid);
-    await this.ordersService.updateStatus(order.id, 'delivering');
-    this.toast.show('Entrega aceita! Bora lá!');
-    this.activeTab = 'active';
+    try {
+      await this.ordersService.updateStatus(order.id, 'delivering', { deliveryPersonId: this.deliveryUid });
+      this.toast.show('Entrega aceita! Bora lá!');
+      this.activeTab = 'active';
+    } catch (err) { this.toast.show(apiErrorMessage(err, 'Não foi possível aceitar a entrega.'), 'error'); }
   }
 
   async complete(id: string) {
-    await this.ordersService.updateStatus(id, 'delivered');
-    this.toast.show('Entrega confirmada!');
-    this.activeTab = 'done';
+    try {
+      await this.ordersService.updateStatus(id, 'delivered');
+      this.toast.show('Entrega confirmada!');
+      this.activeTab = 'done';
+    } catch (err) { this.toast.show(apiErrorMessage(err, 'Não foi possível confirmar a entrega.'), 'error'); }
   }
 }

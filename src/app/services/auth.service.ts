@@ -1,76 +1,91 @@
-import { Injectable, signal } from '@angular/core';
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import { firebaseAuth } from '../core/firebase/firebase.config';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { UserRole } from '../models';
+import { LoginResponse } from '../core/api/api.types';
+import { roleFromApi } from '../core/api/mappers';
 
 export interface AuthUser {
-  uid: string;
+  uid: string;       // id_usuario da tabela usuario_painel
   email: string;
   role: UserRole;
   username: string;
 }
 
-const ROLE_MAP: Record<string, { role: UserRole; username: string }> = {
-  'gerente@voltz.com':    { role: 'manager',  username: 'Roberto Silva' },
-  'estoque@voltz.com':    { role: 'kitchen',  username: 'Equipe Estoque' },
-  'logistica@voltz.com': { role: 'delivery', username: 'Carlos Mendes' },
-};
+interface Session { token: string; user: AuthUser; }
+
+const SESSION_KEY = 'voltz_session';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _user = signal<AuthUser | null>(null);
-  readonly user = this._user.asReadonly();
+  private http = inject(HttpClient);
+  private _session = signal<Session | null>(readSession());
 
-  // Resolve com o usuário (ou null) após o primeiro onAuthStateChanged.
-  // Passar o valor na Promise elimina qualquer race condition de sinal.
-  private _resolved = false;
-  private _readyResolve!: (u: AuthUser | null) => void;
-  readonly ready = new Promise<AuthUser | null>(res => { this._readyResolve = res; });
+  readonly user = signal<AuthUser | null>(this._session()?.user ?? null);
 
-  constructor() {
-    onAuthStateChanged(firebaseAuth, fbUser => {
-      const email = fbUser?.email?.trim().toLowerCase() ?? '';
-      const mapped = email ? ROLE_MAP[email] : null;
-      const authUser: AuthUser | null = (mapped && fbUser)
-        ? { uid: fbUser.uid, email: fbUser.email!, role: mapped.role, username: mapped.username }
-        : null;
+  /**
+   * Usuário logado AGORA (o guard e os layouts usam isto).
+   * É um getter de propósito: um valor fixo guardaria o usuário de quando o app abriu,
+   * e depois de "Sair" o guard ainda deixaria voltar ao painel sem recarregar a página.
+   */
+  get ready(): Promise<AuthUser | null> { return Promise.resolve(this.user()); }
 
-      this._user.set(authUser);
-
-      if (!this._resolved) {
-        this._resolved = true;
-        this._readyResolve(authUser);
-      }
-    });
-  }
-
-  get isAuthenticated(): boolean { return this._user() !== null; }
-  get role(): UserRole           { return this._user()?.role ?? null; }
-  getUser()                      { return this._user(); }
+  get isAuthenticated(): boolean { return this.user() !== null; }
+  get role(): UserRole           { return this.user()?.role ?? null; }
+  get token(): string | null     { return this._session()?.token ?? null; }
+  getUser()                      { return this.user(); }
 
   async loginWithEmail(email: string, password: string): Promise<AuthUser> {
-    const cred = await signInWithEmailAndPassword(firebaseAuth, email, password);
-    const normalizedEmail = cred.user.email?.trim().toLowerCase() ?? '';
-    const mapped = ROLE_MAP[normalizedEmail];
-    if (!mapped) throw new Error('Conta não autorizada neste sistema.');
-
-    const authUser: AuthUser = {
-      uid:      cred.user.uid,
-      email:    cred.user.email!,
-      role:     mapped.role,
-      username: mapped.username,
-    };
-    this._user.set(authUser);
-
-    if (!this._resolved) {
-      this._resolved = true;
-      this._readyResolve(authUser);
+    try {
+      const res = await firstValueFrom(
+        this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, {
+          email: email.trim().toLowerCase(),
+          senha: password,
+        }),
+      );
+      const user: AuthUser = {
+        uid:      String(res.usuario.id),
+        email:    res.usuario.email,
+        role:     roleFromApi(res.usuario.papel),
+        username: res.usuario.nome,
+      };
+      this.save({ token: res.token, user });
+      return user;
+    } catch (err) {
+      if (err instanceof HttpErrorResponse && err.status === 403) {
+        throw new Error('Conta não autorizada neste sistema.');
+      }
+      if (err instanceof HttpErrorResponse && err.status === 0) {
+        throw new Error('Servidor indisponível. Verifique se a API está rodando.');
+      }
+      throw new Error('E-mail ou senha incorretos.');
     }
-    return authUser;
   }
 
   async logout(): Promise<void> {
-    await signOut(firebaseAuth);
-    this._user.set(null);
+    this.clear();
+  }
+
+  /** Chamado pelo interceptor quando a API responde 401 (token inválido ou expirado). */
+  clear(): void {
+    try { localStorage.removeItem(SESSION_KEY); } catch { /* ignora */ }
+    this._session.set(null);
+    this.user.set(null);
+  }
+
+  private save(session: Session): void {
+    try { localStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch { /* ignora */ }
+    this._session.set(session);
+    this.user.set(session.user);
+  }
+}
+
+function readSession(): Session | null {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    return raw ? (JSON.parse(raw) as Session) : null;
+  } catch {
+    return null;
   }
 }

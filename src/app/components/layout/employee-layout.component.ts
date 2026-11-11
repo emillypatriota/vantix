@@ -313,7 +313,8 @@ export class EmployeeLayoutComponent implements OnInit, OnDestroy {
     }
 
     this.ordersSub = this.ordersService.orders.subscribe({
-      next: orders => this.pendingCount.set(orders.filter((o: any) => o.status === 'pending').length),
+      // Gerente: pedidos aguardando pagamento · Estoque: pedidos pagos esperando separação
+      next: orders => this.pendingCount.set(orders.filter(o => o.status === (u.role === 'kitchen' ? 'confirmed' : 'pending')).length),
       error: err => console.error('[EmployeeLayout] orders error:', err),
     });
 

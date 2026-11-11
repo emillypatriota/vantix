@@ -19,7 +19,7 @@ import { OrdersService } from '../../services/orders.service';
         position:sticky;top:0;z-index:100;
       ">
         <div style="
-          max-width:1200px;margin:0 auto;padding:0 1.5rem;
+          max-width:1200px;margin:0 auto;padding:0 1rem;gap:.5rem;
           display:flex;align-items:center;justify-content:space-between;height:4rem
         ">
           <!-- Logo -->
@@ -40,8 +40,8 @@ import { OrdersService } from '../../services/orders.service';
           <div *ngIf="activeDeliveries() > 0"
                style="display:flex;align-items:center;gap:.5rem;padding:.375rem .875rem;background:var(--success-bg);border:1px solid var(--success-border);border-radius:var(--r-full)">
             <span style="width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;flex-shrink:0"></span>
-            <span style="font-size:var(--text-sm);font-weight:600;color:var(--success-text)">
-              {{ activeDeliveries() }} entrega{{ activeDeliveries() > 1 ? 's' : '' }} ativa{{ activeDeliveries() > 1 ? 's' : '' }}
+            <span style="font-size:var(--text-sm);font-weight:600;color:var(--success-text);white-space:nowrap">
+              <span class="pill-icon-sm">🚚 </span>{{ activeDeliveries() }}<span class="pill-label"> entrega{{ activeDeliveries() > 1 ? 's' : '' }} ativa{{ activeDeliveries() > 1 ? 's' : '' }}</span>
             </span>
           </div>
 
