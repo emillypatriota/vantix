@@ -1,14 +1,9 @@
-// TODO: substitua pela config do projeto Firebase da VOLTZ (ver FIREBASE_SETUP.md).
-// Os valores abaixo ainda são do projeto antigo maka-delivery.
+// Configuração de desenvolvimento.
+// useMock: true  -> o Angular usa um back-end falso em memória (dados do database/02_dados.sql).
+// useMock: false -> o Angular chama a API Java (Spring Boot) em apiUrl.
 export const environment = {
   production: false,
-  firebase: {
-    apiKey: "AIzaSyBr4OjETAPxYZonx3tI9nfFlZiEfgxEcWo",
-    authDomain: "maka-delivery-7382b.firebaseapp.com",
-    projectId: "maka-delivery-7382b",
-    storageBucket: "maka-delivery-7382b.firebasestorage.app",
-    messagingSenderId: "381179855420",
-    appId: "1:381179855420:web:daa9f711a37a5e2415b939",
-    measurementId: "G-3RDB5WMW66"
-  }
+  apiUrl: 'http://localhost:8080/api',
+  useMock: true,
+  pollingMs: 5000, // intervalo de atualização dos painéis de Estoque e Logística
 };

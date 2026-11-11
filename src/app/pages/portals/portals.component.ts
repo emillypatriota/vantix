@@ -111,7 +111,7 @@ import { NgFor } from '@angular/common';
   `,
   styles: [`
     @media (max-width: 900px) { .portal-grid { grid-template-columns: 1fr 1fr !important; } }
-    @media (max-width: 640px) { .portal-grid { grid-template-columns: 1fr !important; } }
+    @media (max-width: 640px) { .portal-grid { grid-template-columns: minmax(0,1fr) !important; } }
   `]
 })
 export class PortalsComponent {

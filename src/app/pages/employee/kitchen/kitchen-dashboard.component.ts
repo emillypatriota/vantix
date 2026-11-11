@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { OrdersService } from '../../../services/orders.service';
+import { ToastService } from '../../../services/toast.service';
+import { apiErrorMessage } from '../../../core/api/auth.interceptor';
 import { Order, OrderStatus } from '../../../models';
 
 @Component({
@@ -39,14 +41,14 @@ import { Order, OrderStatus } from '../../../models';
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--neutral)">
                 <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
               </svg>
-              Aguardando
+              Para separar
             </div>
             <span class="kanban-count">{{ pending.length }}</span>
           </div>
           <div class="kanban-body">
             <div *ngIf="pending.length === 0" class="empty-state" style="padding:2.5rem 1rem">
               <div class="empty-icon" style="font-size:1.25rem">⏳</div>
-              <p style="font-size:var(--text-sm)">Nenhum pedido aguardando</p>
+              <p style="font-size:var(--text-sm)">Nenhum pedido para separar</p>
             </div>
             <div *ngFor="let o of pending; trackBy: trackById" class="kanban-card animate-scale-in">
               <div class="kanban-card-header">
@@ -55,7 +57,7 @@ import { Order, OrderStatus } from '../../../models';
                   <span style="font-size:var(--text-xs);color:var(--text-tertiary);font-family:var(--font-mono)">{{ o.createdAt | date:'HH:mm' }}</span>
                 </div>
                 <span class="badge badge-pending">
-                  <span class="badge-dot"></span>Aguardando
+                  <span class="badge-dot"></span>Pago
                 </span>
               </div>
 
@@ -199,15 +201,10 @@ import { Order, OrderStatus } from '../../../models';
                 {{ o.customer.address }}
               </div>
 
-              <button class="btn btn-sm" style="width:100%;justify-content:center;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)"
-                      (click)="advance(o.id, 'delivering')">
-                Despachado
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="1" y="3" width="15" height="13" rx="1"/>
-                  <path d="M16 8h4l3 4v5h-7V8z"/>
-                  <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-                </svg>
-              </button>
+              <!-- O despacho é feito pela Logística (aceita a entrega e vira "Em transporte"). -->
+              <div style="width:100%;text-align:center;padding:.45rem;border-radius:var(--r-md);background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);font-size:var(--text-xs);font-weight:600">
+                🚚 Aguardando coleta da Logística
+              </div>
             </div>
           </div>
         </div>
@@ -223,13 +220,14 @@ export class KitchenDashboardComponent implements OnInit, OnDestroy {
   ready:     Order[] = [];
   private sub?: Subscription;
 
-  constructor(private ordersService: OrdersService) {}
+  constructor(private ordersService: OrdersService, private toast: ToastService) {}
 
   ngOnInit() {
     this.sub = this.ordersService.orders.subscribe({
       next: orders => {
         this.allOrders = orders;
-        this.pending   = orders.filter(o => o.status === 'pending');
+        // Só entra na separação o pedido com pagamento aprovado (status confirmado).
+        this.pending   = orders.filter(o => o.status === 'confirmed');
         this.preparing = orders.filter(o => o.status === 'preparing');
         this.ready     = orders.filter(o => o.status === 'ready');
       },
@@ -242,6 +240,7 @@ export class KitchenDashboardComponent implements OnInit, OnDestroy {
   trackById(_: number, o: Order) { return o.id; }
 
   async advance(id: string, next: OrderStatus) {
-    await this.ordersService.updateStatus(id, next);
+    try { await this.ordersService.updateStatus(id, next); }
+    catch (err) { this.toast.show(apiErrorMessage(err, 'Não foi possível atualizar o pedido.'), 'error'); }
   }
 }

@@ -7,6 +7,7 @@ import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive
 import { OrdersService } from '../../services/orders.service';
 import { ToastService } from '../../services/toast.service';
 import { CartItem } from '../../models';
+import { apiErrorMessage } from '../../core/api/auth.interceptor';
 
 type PayMethod = 'pix' | 'credit' | 'debit' | 'boleto';
 const MAX_INSTALLMENTS = 10;
@@ -74,6 +75,12 @@ const MAX_INSTALLMENTS = 10;
                     <input class="form-input" [value]="form.phone" (input)="formatPhone($event)" name="phone" placeholder="(11) 98765-4321" maxlength="15"
                            [class.input-error]="submitted && !form.phone">
                     <span *ngIf="submitted && !form.phone" class="form-error">Campo obrigatório</span>
+                  </div>
+                  <div class="form-group" style="grid-column:1/-1">
+                    <label class="form-label">E-mail *</label>
+                    <input class="form-input" type="email" [(ngModel)]="form.email" name="email" placeholder="voce@email.com"
+                           [class.input-error]="submitted && !emailValid">
+                    <span *ngIf="submitted && !emailValid" class="form-error">Informe um e-mail válido</span>
                   </div>
                 </div>
               </div>
@@ -165,7 +172,7 @@ const MAX_INSTALLMENTS = 10;
                 </div>
 
                 <!-- Payment method selector -->
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.625rem;margin-bottom:1.25rem">
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.625rem;margin-bottom:1.25rem" class="pay-grid">
                   <button *ngFor="let p of paymentMethods" type="button"
                     (click)="form.payment = p.value"
                     style="display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:.875rem .5rem;border-radius:var(--r-xl);border:2px solid;transition:all .2s;font-size:.72rem;font-weight:600"
@@ -469,14 +476,15 @@ const MAX_INSTALLMENTS = 10;
   styles: [`
     @keyframes spin    { to { transform:rotate(360deg); } }
     @keyframes fadeUp  { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    @media(max-width:900px) { .checkout-grid { grid-template-columns: 1fr !important; } }
-    @media(max-width:640px) { .grid-2 { grid-template-columns: 1fr !important; } }
+    @media(max-width:900px) { .checkout-grid { grid-template-columns: minmax(0,1fr) !important; } }
+    @media(max-width:480px) { .pay-grid { grid-template-columns: repeat(2,1fr) !important; } }
+    @media(max-width:640px) { .grid-2 { grid-template-columns: minmax(0,1fr) !important; } }
   `]
 })
 export class CheckoutComponent implements OnInit {
   brl(v: number) { return (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
   form = {
-    name: '', phone: '', zipCode: '', address: '', number: '',
+    name: '', phone: '', email: '', zipCode: '', address: '', number: '',
     complement: '', neighborhood: '', city: 'São Paulo', state: 'SP',
     payment: 'pix' as PayMethod, observations: '',
     cardNumber: '', cardHolder: '', cardExpiry: '', cardCvv: '',
@@ -485,7 +493,7 @@ export class CheckoutComponent implements OnInit {
 
   steps = ['Dados Pessoais', 'Endereço', 'Pagamento', 'Revisão'];
   get currentStep() {
-    if (!this.form.name || !this.form.phone) return 1;
+    if (!this.form.name || !this.form.phone || !this.emailValid) return 1;
     if (!this.form.address || !this.form.number) return 2;
     return 3;
   }
@@ -534,10 +542,17 @@ export class CheckoutComponent implements OnInit {
     private router: Router
   ) {}
 
+  get emailValid() { return /^\S+@\S+\.\S+$/.test(this.form.email.trim()); }
+
   ngOnInit() {
     this.cartItems = this.cart.getItems();
     this.subtotal  = this.cart.getTotal();
     if (!this.cartItems.length) this.router.navigate(['/carrinho']);
+    // Preenche com os dados da última compra neste navegador
+    try {
+      this.form.phone = localStorage.getItem('voltz_customer_phone') ?? '';
+      this.form.email = localStorage.getItem('voltz_customer_email') ?? '';
+    } catch { /* ignora */ }
   }
 
   // ── Input formatters ──────────────────────────────────────────
@@ -616,7 +631,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   private isFormValid(): boolean {
-    const base = !!(this.form.name && this.form.phone && this.form.zipCode
+    const base = !!(this.form.name && this.form.phone && this.emailValid && this.form.zipCode
                     && this.form.address && this.form.number && this.form.neighborhood);
     if (this.form.payment === 'credit' || this.form.payment === 'debit') {
       return base && !!(this.form.cardNumber && this.form.cardHolder
@@ -633,17 +648,8 @@ export class CheckoutComponent implements OnInit {
     }
     this.submitting = true;
 
-    const payLabels: Record<string, string> = {
-      pix: 'PIX', credit: 'Cartão de Crédito', debit: 'Cartão de Débito', boleto: 'Boleto',
-    };
-    let payDetail = payLabels[this.form.payment];
-    if ((this.form.payment === 'credit' || this.form.payment === 'debit') && this.form.cardNumber) {
-      const last4 = this.form.cardNumber.replace(/\D/g, '').slice(-4);
-      payDetail += ` •••• ${last4}`;
-      if (this.form.payment === 'credit' && this.form.installments !== '1') {
-        payDetail += ` — ${this.form.installments}× sem juros`;
-      }
-    }
+    // Os dados do cartão não são enviados nem gravados: a API recebe só forma e parcelas.
+    const installments = this.form.payment === 'credit' ? Number(this.form.installments) : 1;
 
     try {
       const addr = [
@@ -655,19 +661,20 @@ export class CheckoutComponent implements OnInit {
       ].filter(Boolean).join(' ');
 
       const order = await this.orders.addOrder({
-        items:         this.cartItems,
-        customer:      { name: this.form.name, phone: this.form.phone, address: addr },
-        paymentMethod: payDetail,
-        total:         this.total,
-        deliveryFee:   this.deliveryFee,
-        observations:  this.form.observations,
+        items:        this.cartItems,
+        customer:     { name: this.form.name.trim(), phone: this.form.phone, email: this.form.email.trim().toLowerCase(), address: addr },
+        payment:      { method: this.form.payment, installments },
+        observations: this.form.observations,
       });
-      localStorage.setItem('voltz_customer_phone', this.form.phone);
+      try {
+        localStorage.setItem('voltz_customer_phone', this.form.phone);
+        localStorage.setItem('voltz_customer_email', this.form.email.trim().toLowerCase());
+      } catch { /* ignora */ }
       this.cart.clear();
       this.toast.show('Pedido realizado com sucesso! 🎉');
       this.router.navigate(['/confirmacao'], { state: { order } });
-    } catch {
-      this.toast.show('Erro ao salvar pedido. Tente novamente.', 'error');
+    } catch (err) {
+      this.toast.show(apiErrorMessage(err, 'Erro ao salvar pedido. Tente novamente.'), 'error');
       this.submitting = false;
     }
   }

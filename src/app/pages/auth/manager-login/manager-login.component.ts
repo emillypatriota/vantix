@@ -6,7 +6,7 @@ import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../services/toast.service';
 import { UserRole } from '../../../models';
 
-// Pre-registered Firebase accounts:
+// Usuários do 02_dados.sql (tabela usuario_painel):
 // gerente@voltz.com    / voltz2024
 // estoque@voltz.com    / voltz2024
 // logistica@voltz.com / voltz2024
@@ -187,7 +187,7 @@ function makeLoginComponent(
       @keyframes spin { to { transform: rotate(360deg); } }
       @keyframes fadeUp { from { opacity:0;transform:translateY(8px) } to { opacity:1;transform:translateY(0) } }
       @media (max-width: 768px) {
-        .login-grid { grid-template-columns: 1fr !important; }
+        .login-grid { grid-template-columns: minmax(0,1fr) !important; }
         .login-left { display: none !important; }
       }
     `]
@@ -235,8 +235,8 @@ function makeLoginComponent(
       try {
         await this.auth.loginWithEmail(this.email, this.password);
         this.toast.show('Acesso autorizado. Bem-vindo!');
-        // Usa navegação nativa: Firebase persiste a sessão, a página recarrega,
-        // APP_INITIALIZER aguarda auth.ready e o guard passa de forma garantida.
+        // Usa navegação nativa: a sessão fica no localStorage, a página recarrega,
+        // o AuthService lê a sessão ao iniciar e o guard libera a rota do painel.
         setTimeout(() => { window.location.assign(redirect); }, 400);
       } catch (err: any) {
         const msg = err?.message ?? '';

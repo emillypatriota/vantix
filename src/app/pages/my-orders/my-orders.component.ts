@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { OrdersService } from '../../services/orders.service';
 import { Order } from '../../models';
 
-const STATUS_STEPS = ['pending','preparing','ready','delivering','delivered'];
+const STATUS_STEPS = ['pending','confirmed','preparing','ready','delivering','delivered'];
 const STATUS_CONFIG: Record<string, { label:string; color:string; bg:string; desc:string; }> = {
   pending:    { label:'Aguardando pagamento', color:'#64748b', bg:'#f0eee8', desc:'Pedido recebido. Assim que o pagamento for aprovado, começamos a separação.' },
   confirmed:  { label:'Pagamento aprovado',   color:'#6d28d9', bg:'#ede9fe', desc:'Pagamento confirmado! Seu pedido já está na fila de separação.' },
@@ -18,7 +20,7 @@ const STATUS_CONFIG: Record<string, { label:string; color:string; bg:string; des
 @Component({
   selector: 'app-my-orders',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, DatePipe],
+  imports: [RouterLink, NgFor, NgIf, DatePipe, FormsModule],
   template: `
     <div style="padding:2.5rem 0 4rem;background:var(--stone-50);min-height:60vh">
       <div class="container" style="max-width:740px">
@@ -27,11 +29,19 @@ const STATUS_CONFIG: Record<string, { label:string; color:string; bg:string; des
           <p style="color:var(--stone-500);font-size:.875rem">Acompanhe o status das suas entregas em tempo real</p>
         </div>
 
+        <!-- Busca por telefone -->
+        <form (ngSubmit)="lookup()" style="display:flex;gap:.625rem;margin-bottom:1.75rem;flex-wrap:wrap">
+          <input class="form-input" name="phone" [(ngModel)]="phoneInput" placeholder="Telefone usado na compra: (11) 98765-4321"
+                 style="flex:1;min-width:220px" inputmode="tel">
+          <button class="btn btn-primary" type="submit">Buscar pedidos</button>
+        </form>
+        <div *ngIf="loading" style="text-align:center;color:var(--stone-400);font-size:.85rem;padding:2rem">Carregando pedidos...</div>
+
         <!-- Vazio -->
-        <div *ngIf="orders.length===0" style="text-align:center;padding:5rem 2rem">
+        <div *ngIf="!loading && orders.length===0" style="text-align:center;padding:5rem 2rem">
           <div style="width:5rem;height:5rem;border-radius:50%;background:var(--stone-100);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem">📦</div>
-          <h2 style="font-family:var(--font-serif);font-size:1.75rem;margin-bottom:.75rem;color:var(--stone-900)">Nenhum pedido ainda</h2>
-          <p style="color:var(--stone-500);margin-bottom:2rem;font-size:.9rem">Faça seu primeiro pedido e acompanhe aqui em tempo real.</p>
+          <h2 style="font-family:var(--font-serif);font-size:1.75rem;margin-bottom:.75rem;color:var(--stone-900)">{{ phone ? 'Nenhum pedido encontrado' : 'Nenhum pedido ainda' }}</h2>
+          <p style="color:var(--stone-500);margin-bottom:2rem;font-size:.9rem">{{ phone ? 'Confira o telefone digitado ou faça seu primeiro pedido.' : 'Faça seu primeiro pedido ou busque pelo telefone usado na compra.' }}</p>
           <a routerLink="/produtos" class="btn btn-primary btn-lg">Ver produtos</a>
         </div>
 
@@ -79,6 +89,9 @@ const STATUS_CONFIG: Record<string, { label:string; color:string; bg:string; des
             <p style="font-size:.8rem;color:var(--stone-400);display:flex;align-items:flex-start;gap:.375rem">
               <span style="flex-shrink:0">📍</span><span>{{ order.customer.address }}</span>
             </p>
+            <p *ngIf="order.status==='cancelled' && order.cancelReason" style="font-size:.78rem;background:#fee2e2;border:1px solid #fecaca;padding:.5rem .75rem;border-radius:6px;color:#b91c1c;margin-top:.5rem">
+              Motivo do cancelamento: {{ order.cancelReason }}
+            </p>
             <p *ngIf="order.observations" style="font-size:.78rem;background:#eef4ff;border:1px solid #bfd2fd;padding:.5rem .75rem;border-radius:6px;color:#173d8c;margin-top:.5rem">
               📝 {{ order.observations }}
             </p>
@@ -88,19 +101,36 @@ const STATUS_CONFIG: Record<string, { label:string; color:string; bg:string; des
     </div>
   `,
 })
-export class MyOrdersComponent implements OnInit {
+export class MyOrdersComponent implements OnInit, OnDestroy {
   brl(v: number) { return (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
   orders: Order[] = [];
   steps = STATUS_STEPS;
   cfg(status: string) { return STATUS_CONFIG[status] ?? STATUS_CONFIG['pending']; }
   stepIndex(status: string) { return STATUS_STEPS.indexOf(status); }
+  phone = '';
+  phoneInput = '';
+  loading = false;
+  private sub?: Subscription;
+
   constructor(private ordersService: OrdersService) {}
+
   ngOnInit() {
-    const myPhone = localStorage.getItem('voltz_customer_phone');
-    this.ordersService.orders.subscribe(all => {
-      this.orders = myPhone
-        ? all.filter(o => o.customer?.phone === myPhone)
-        : all.filter(o => o.isLocal);
+    try { this.phoneInput = localStorage.getItem('voltz_customer_phone') ?? ''; } catch { /* ignora */ }
+    if (this.phoneInput) this.lookup();
+  }
+
+  ngOnDestroy() { this.sub?.unsubscribe(); }
+
+  lookup() {
+    const phone = this.phoneInput.trim();
+    if (phone.replace(/D/g, '').length < 10) { this.phone = ''; this.orders = []; return; }
+    this.phone = phone;
+    this.loading = true;
+    this.sub?.unsubscribe();
+    // Atualiza sozinho a cada poucos segundos (polling), como o painel.
+    this.sub = this.ordersService.customerOrders(phone).subscribe(list => {
+      this.orders = list;
+      this.loading = false;
     });
   }
 }

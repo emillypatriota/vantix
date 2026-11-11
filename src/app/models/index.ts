@@ -20,7 +20,8 @@ export type MenuCategory =
   | 'Monitores'
   | 'Notebooks'
   | 'Smartphones'
-  | 'Games';
+  | 'Games'
+  | 'Áudio';
 
 export type OrderType = 'delivery' | 'retirada';
 
@@ -31,15 +32,13 @@ export interface MenuItem {
   description: string;
   price: number;
   category: MenuCategory | string;
+  categoryId?: number;
   image: string;
   isSpecial?: boolean;
   active?: boolean;
-  prepTime?: number;     // legado (restaurante) — não usado na loja
-  calories?: number;     // legado
   brand?: string;        // marca/fabricante
   oldPrice?: number;     // preço "de" para exibir desconto
   stock?: number;        // unidades em estoque
-  tags?: string[];       // 'RGB', 'Wi-Fi 6', etc.
   createdAt?: Date;
 }
 
@@ -63,7 +62,8 @@ export interface Order {
   orderNumber: string;
   items: CartItem[];
   customer: Customer;
-  paymentMethod: string;
+  paymentMethod: string;            // texto pronto para exibir (ex.: 'Cartão de Crédito — 3× sem juros')
+  payment?: { method: PaymentMethod; installments: number };
   total: number;
   deliveryFee: number;
   status: OrderStatus;
@@ -72,10 +72,7 @@ export interface Order {
   updatedAt?: Date;
   deliveryPersonId?: string;
   observations?: string;
-  isLocal?: boolean;
-  customerUid?: string;
   estimatedTime?: number;   // dias úteis
-  tableNumber?: number;     // legado
   cancelReason?: string;
 }
 
