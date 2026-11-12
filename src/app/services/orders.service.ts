@@ -53,6 +53,13 @@ export class OrdersService {
     );
   }
 
+  /** Busca os pedidos de um cliente uma única vez (sem polling). Lança erro se a API falhar. */
+  async fetchCustomerOrders(phone: string): Promise<Order[]> {
+    const params = new HttpParams().set('telefone', phone);
+    const list = await firstValueFrom(this.http.get<PedidoApi[]>(`${this.base}/cliente`, { params }));
+    return list.map(orderFromApi).sort((a, b) => +b.createdAt - +a.createdAt);
+  }
+
   /**
    * Cria o pedido. Preço, frete, total e número são calculados pela API;
    * se faltar estoque a API responde 409 com { mensagem }.

@@ -6,6 +6,7 @@ import { CartService, shippingFor, SHIPPING_FEE } from '../../services/cart.serv
 import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive';
 import { OrdersService } from '../../services/orders.service';
 import { ToastService } from '../../services/toast.service';
+import { CustomerService } from '../../services/customer.service';
 import { CartItem } from '../../models';
 import { apiErrorMessage } from '../../core/api/auth.interceptor';
 
@@ -539,7 +540,8 @@ export class CheckoutComponent implements OnInit {
     private cart: CartService,
     private orders: OrdersService,
     private toast: ToastService,
-    private router: Router
+    private router: Router,
+    private customers: CustomerService,
   ) {}
 
   get emailValid() { return /^\S+@\S+\.\S+$/.test(this.form.email.trim()); }
@@ -548,11 +550,13 @@ export class CheckoutComponent implements OnInit {
     this.cartItems = this.cart.getItems();
     this.subtotal  = this.cart.getTotal();
     if (!this.cartItems.length) this.router.navigate(['/carrinho']);
-    // Preenche com os dados da última compra neste navegador
-    try {
-      this.form.phone = localStorage.getItem('voltz_customer_phone') ?? '';
-      this.form.email = localStorage.getItem('voltz_customer_email') ?? '';
-    } catch { /* ignora */ }
+    // Cliente já identificado: preenche nome, telefone e e-mail
+    const c = this.customers.customer();
+    if (c) {
+      this.form.name  = c.name;
+      this.form.phone = c.phone;
+      this.form.email = c.email;
+    }
   }
 
   // ── Input formatters ──────────────────────────────────────────
@@ -666,10 +670,7 @@ export class CheckoutComponent implements OnInit {
         payment:      { method: this.form.payment, installments },
         observations: this.form.observations,
       });
-      try {
-        localStorage.setItem('voltz_customer_phone', this.form.phone);
-        localStorage.setItem('voltz_customer_email', this.form.email.trim().toLowerCase());
-      } catch { /* ignora */ }
+      this.customers.remember({ name: this.form.name.trim(), phone: this.form.phone, email: this.form.email.trim().toLowerCase() });
       this.cart.clear();
       this.toast.show('Pedido realizado com sucesso! 🎉');
       this.router.navigate(['/confirmacao'], { state: { order } });

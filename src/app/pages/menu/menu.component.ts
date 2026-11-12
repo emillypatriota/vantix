@@ -134,8 +134,9 @@ const MAX_INSTALLMENTS = 10;
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.375rem" class="stagger">
           <div *ngFor="let item of displayItems()" class="menu-card-premium animate-fade-up">
 
-            <!-- Image -->
-            <div style="position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--stone-100)">
+            <!-- Image (abre os detalhes) -->
+            <a [routerLink]="['/produtos', item.id]" [attr.aria-label]="'Ver detalhes de ' + item.name"
+               style="display:block;position:relative;aspect-ratio:16/10;max-width:100%;overflow:hidden;background:var(--stone-100)">
               <img [src]="item.image" [alt]="item.name" loading="lazy"
                    appImgFallback
                    style="width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.4,0,.2,1)">
@@ -146,12 +147,12 @@ const MAX_INSTALLMENTS = 10;
                 <span *ngIf="item.isSpecial" style="background:var(--stone-900);color:#fff;padding:.25rem .65rem;font-size:.65rem;letter-spacing:.12em;font-weight:700;border-radius:var(--r-sm)">★ DESTAQUE</span>
               </div>
 
-            </div>
+            </a>
 
             <!-- Body -->
             <div style="padding:1.125rem 1.25rem 1.25rem;background:#fff;display:flex;flex-direction:column;flex:1">
               <p *ngIf="item.brand" style="font-size:.68rem;font-weight:700;letter-spacing:.12em;color:var(--brand-600);text-transform:uppercase;margin-bottom:.25rem">{{ item.brand }}</p>
-              <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--stone-900);margin-bottom:.375rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em">{{ item.name }}</h3>
+              <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin-bottom:.375rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em"><a [routerLink]="['/produtos', item.id]" class="card-name-link">{{ item.name }}</a></h3>
               <p style="font-size:.78rem;color:var(--stone-500);line-height:1.6;margin-bottom:.875rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ item.description }}</p>
 
               <!-- Preço -->
@@ -214,6 +215,9 @@ const MAX_INSTALLMENTS = 10;
     .menu-card-premium:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(11,27,63,.14); border-color: var(--brand-200); }
     @media (prefers-reduced-motion: reduce) { .menu-card-premium, .menu-card-premium img { transition:none !important; } .menu-card-premium:hover { transform:none; } .menu-card-premium:hover img { transform:none; } }
     .menu-card-premium:hover img { transform: scale(1.04); }
+    .card-name-link { color:var(--stone-900); text-decoration:none; }
+    .card-name-link:hover { color:var(--brand-700); }
+    .card-name-link:focus-visible { outline:2px solid var(--brand-400); outline-offset:2px; }
   `]
 })
 export class MenuComponent {

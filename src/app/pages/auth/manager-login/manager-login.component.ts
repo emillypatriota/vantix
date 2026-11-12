@@ -42,7 +42,7 @@ function makeLoginComponent(
               <div style="width:38px;height:38px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#fff"
                    [style.background]="'linear-gradient(135deg,' + accentCol + ',' + accentColDark + ')'">V</div>
               <div>
-                <div style="font-family:var(--font-display);font-size:1.25rem;letter-spacing:.12em;color:#fff">VOLTZ</div>
+                <div style="font-family:var(--font-display);font-size:1.25rem;letter-spacing:.12em;color:#fff">VANTIX</div>
                 <div style="font-size:.55rem;letter-spacing:.3em;margin-top:-3px" [style.color]="accentCol">TECH STORE</div>
               </div>
             </a>
@@ -83,7 +83,7 @@ function makeLoginComponent(
                 <span style="font-size:.65rem;letter-spacing:.2em;font-weight:700;text-transform:uppercase" [style.color]="accentCol">LOGIN</span>
               </div>
               <h1 style="font-family:var(--font-display);font-size:2.25rem;color:var(--text-primary);margin-bottom:.375rem">Bem-vindo</h1>
-              <p style="color:var(--text-tertiary);font-size:.875rem">Acesso exclusivo para colaboradores VOLTZ</p>
+              <p style="color:var(--text-tertiary);font-size:.875rem">Acesso exclusivo para colaboradores VANTIX</p>
             </div>
 
             <!-- Form -->

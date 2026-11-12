@@ -6,11 +6,13 @@ import { CartService } from '../../services/cart.service';
 import { ToastService } from '../../services/toast.service';
 import { MenuItem } from '../../models';
 import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive';
+import { AlsoBoughtComponent } from '../../components/ui/also-bought.component';
+import { CustomerService } from '../../services/customer.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, NgClass, ImgFallbackDirective],
+  imports: [RouterLink, NgFor, NgIf, NgClass, ImgFallbackDirective, AlsoBoughtComponent],
   template: `
     <!-- HERO -->
     <section class="hero">
@@ -53,6 +55,16 @@ import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive
       </div>
     </div>
 
+    <!-- RECOMENDADO PARA VOCÊ (cliente identificado, pelo histórico de compras) -->
+    <section *ngIf="customers.customer() && customers.historyIds().length" style="padding:2.5rem 0 1rem;background:#fff">
+      <div class="container">
+        <app-also-bought [productIds]="customers.historyIds()"
+                         tag="PERSONALIZADO"
+                         [title]="'Recomendado para você, ' + (customers.firstName() || 'cliente')"
+                         subtitle="Com base nas suas compras anteriores"></app-also-bought>
+      </div>
+    </section>
+
     <!-- DESTAQUES -->
     <section style="padding:5rem 0;background:#fff">
       <div class="container">
@@ -67,13 +79,13 @@ import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive
         </div>
         <div class="grid-3">
           <div *ngFor="let item of specials; let i = index" class="menu-card card-hover animate-fade-up" [style.animation-delay]="(i*0.1)+'s'">
-            <div class="menu-card-img">
+            <a class="menu-card-img" [routerLink]="['/produtos', item.id]" style="display:block">
               <img [src]="item.image" [alt]="item.name" loading="lazy" appImgFallback>
               <span class="special-tag">★ DESTAQUE</span>
-            </div>
+            </a>
             <div class="menu-card-body">
               <p *ngIf="item.brand" style="font-size:.68rem;font-weight:700;letter-spacing:.12em;color:var(--brand-600);text-transform:uppercase;margin-bottom:.25rem">{{ item.brand }}</p>
-              <h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;margin-bottom:.375rem;color:var(--stone-900)">{{ item.name }}</h3>
+              <h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;margin-bottom:.375rem"><a [routerLink]="['/produtos', item.id]" style="color:var(--stone-900);text-decoration:none">{{ item.name }}</a></h3>
               <p style="font-size:.82rem;color:var(--stone-500);line-height:1.6;margin-bottom:1.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ item.description }}</p>
               <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--stone-100);padding-top:1rem">
                 <div>
@@ -122,7 +134,7 @@ import { ImgFallbackDirective } from '../../components/ui/img-fallback.directive
         <div style="text-align:center;margin-bottom:3.5rem">
           <div class="section-tag" style="justify-content:center">
             <div class="section-tag-line"></div>
-            <span style="color:var(--brand-400)">POR QUE COMPRAR NA VOLTZ</span>
+            <span style="color:var(--brand-400)">POR QUE COMPRAR NA VANTIX</span>
             <div class="section-tag-line"></div>
           </div>
           <h2 class="section-title" style="color:#fff">Feita para quem leva tecnologia a sério</h2>
@@ -180,10 +192,11 @@ export class HomeComponent implements OnInit {
     { icon: '💳', title: 'Pague como preferir', text: 'Pix, boleto, cartão de crédito em até 10x sem juros ou débito.' },
   ];
 
-  constructor(private menu: MenuService, private cart: CartService, private toast: ToastService) {
+  constructor(private menu: MenuService, private cart: CartService, private toast: ToastService, public customers: CustomerService) {
     effect(() => { this.specials = this.menu.getSpecials(); });
   }
-  ngOnInit() {}
+  // Atualiza o histórico ao abrir a home (pode ter comprado algo desde a última visita)
+  ngOnInit() { this.customers.refreshHistory(); }
   addToCart(item: MenuItem) { this.cart.addItem(item); this.toast.show(`${item.name} adicionado ao carrinho!`); }
   brl(v: number) { return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
 }

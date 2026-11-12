@@ -1,4 +1,4 @@
-# Contrato da API — Voltz Tech Store
+# Contrato da API — Vantix Tech Store
 
 Este é o formato que o **Angular já usa**. Se a API Java seguir exatamente isto, o front
 funciona sem nenhuma mudança: basta trocar `useMock: true` por `false` em

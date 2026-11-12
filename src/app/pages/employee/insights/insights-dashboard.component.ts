@@ -105,7 +105,7 @@ const REFRESH_MS = 15000;
           <div class="kpi-icon" style="background:rgba(34,197,94,.12);color:#4ade80">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-          <div class="kpi-label">Taxa de Entrega</div>
+          <div class="kpi-label">Taxa de conclusão</div>
           <div class="kpi-value">{{ completionRate }}%</div>
           <div class="kpi-trend" [class.up]="completionRate >= 80" [class.flat]="completionRate < 80">
             {{ data?.resumo?.pedidosEntregues ?? 0 }} / {{ data?.resumo?.totalPedidos ?? 0 }} entregues

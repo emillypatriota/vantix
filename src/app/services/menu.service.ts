@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { MenuItem } from '../models';
@@ -49,6 +49,16 @@ export class MenuService {
       if (cats.length) this._categories.set(cats);
     } catch (e) {
       console.error('[MenuService] erro ao carregar categorias:', e);
+    }
+  }
+
+  /** Um produto pelo id (página de detalhes). Devolve null se não existir. */
+  async getById(id: string): Promise<MenuItem | null> {
+    try {
+      return productFromApi(await firstValueFrom(this.http.get<ProdutoApi>(`${this.base}/${id}`)));
+    } catch (e) {
+      if (e instanceof HttpErrorResponse && e.status === 404) return null;
+      throw e;
     }
   }
 
