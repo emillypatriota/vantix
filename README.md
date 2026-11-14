@@ -1,4 +1,4 @@
-# VOLTZ Tech Store — Angular 17 + Java (Spring Boot) + MySQL
+# VANTIX Tech Store — Angular 17 + Java (Spring Boot) + MySQL
 
 Loja virtual de tecnologia (hardware, periféricos, notebooks, smartphones e games),
 derivada do projeto acadêmico **Maka Delivery**. O design system e a arquitetura
@@ -34,12 +34,21 @@ Em `src/environments/environment.ts`:
 | Estoque   | estoque@voltz.com   | voltz2024 |
 | Logística | logistica@voltz.com | voltz2024 |
 
+> Os e-mails e a senha ainda usam "voltz" porque vêm do `database/02_dados.sql`. Trocar exige mudar o banco junto.
+
+### Cliente (sem senha)
+
+O cliente não tem login: ele se identifica pelo **telefone usado nas compras** (botão "Identificar-se" no topo da loja).
+Com isso o site mostra "Olá, Nome", preenche o checkout e exibe **"Recomendado para você"** na home e em Meus pedidos,
+com base no que ele já comprou. Para testar, use o telefone de uma cliente do banco: `(11) 96487-6234`.
+
 ## Rotas principais
 
 | Rota                   | Descrição                          |
 |------------------------|------------------------------------|
 | /                      | Home                               |
 | /produtos              | Catálogo com busca e categorias    |
+| /produtos/:id          | Detalhes do produto + recomendações |
 | /carrinho              | Carrinho                           |
 | /checkout              | Finalizar pedido                   |
 | /meus-pedidos          | Acompanhar pedidos                 |
@@ -66,7 +75,7 @@ Em `src/environments/environment.ts`:
 | Frete e frete grátis           | `src/app/services/cart.service.ts` (`SHIPPING_FEE`, `FREE_SHIPPING_MIN`) |
 | Máximo de parcelas             | `MAX_INSTALLMENTS` em `pages/menu` e `pages/checkout` |
 | Rótulos dos status do pedido   | `src/app/models/index.ts` (`STATUS_CONFIG`) e `pages/my-orders` |
-| Nome da loja                   | busque por `VOLTZ` no projeto                        |
+| Nome da loja                   | busque por `VANTIX` no projeto                        |
 
 ### Paleta
 

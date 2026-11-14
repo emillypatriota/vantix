@@ -33,7 +33,7 @@ import { NgFor } from '@angular/common';
               font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:#fff;
               margin-bottom:.875rem;box-shadow:0 8px 24px rgba(58,111,240,.3)
             ">V</div>
-            <span style="font-family:var(--font-display);font-size:2.25rem;letter-spacing:.15em;color:#fff">VOLTZ</span>
+            <span style="font-family:var(--font-display);font-size:2.25rem;letter-spacing:.15em;color:#fff">VANTIX</span>
             <span style="font-size:.6rem;letter-spacing:.35em;color:var(--brand-400);margin-top:-4px">TECH STORE</span>
           </a>
           <div style="height:1px;width:3rem;background:linear-gradient(to right,transparent,rgba(58,111,240,.5),transparent);margin:1.25rem auto 1.75rem"></div>

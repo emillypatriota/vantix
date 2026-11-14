@@ -43,7 +43,7 @@ interface NavItem {
           <a [routerLink]="dashboardRoute" class="logo-link" (click)="mobileOpen.set(false)">
             <div class="logo-mark">V</div>
             <div class="logo-text">
-              <span class="logo-name">VOLTZ</span>
+              <span class="logo-name">VANTIX</span>
               <span class="logo-sub">{{ roleSubtitle }}</span>
             </div>
           </a>

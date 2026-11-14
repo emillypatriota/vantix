@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+import { CustomerMenuComponent } from '../ui/customer-menu.component';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe, NgIf],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe, NgIf, CustomerMenuComponent],
   template: `
     <div class="light-mode" style="display:flex;flex-direction:column;min-height:100vh;background:var(--bg-base)">
 
@@ -33,7 +34,7 @@ import { CartService } from '../../services/cart.service';
 
           <!-- Logo -->
           <a routerLink="/" style="display:flex;flex-direction:column;gap:0;text-decoration:none;flex-shrink:0">
-            <span class="logo-main">VOLTZ</span>
+            <span class="logo-main">VANTIX</span>
             <span class="logo-sub">TECH STORE</span>
           </a>
 
@@ -46,6 +47,9 @@ import { CartService } from '../../services/cart.service';
 
           <!-- Right side actions -->
           <div style="display:flex;align-items:center;gap:.625rem">
+
+            <!-- Perfil do cliente (no celular fica no menu lateral) -->
+            <app-customer-menu class="header-customer" variant="header"></app-customer-menu>
 
             <!-- Cart button -->
             <div class="cart-btn-wrapper">
@@ -82,20 +86,22 @@ import { CartService } from '../../services/cart.service';
       <!-- Mobile overlay -->
       <div *ngIf="menuOpen"
            (click)="menuOpen = false"
-           style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:149;backdrop-filter:blur(4px);animation:fadeIn .2s ease">
+           style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:310;backdrop-filter:blur(4px);animation:fadeIn .2s ease">
       </div>
 
       <!-- Mobile slide-in menu -->
       <div class="mobile-nav-panel" [class.mobile-nav-open]="menuOpen">
         <div style="padding:1.5rem 1.5rem 1rem;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between">
           <div>
-            <div style="font-family:var(--font-display);font-size:1.5rem;letter-spacing:.12em;color:#fff">VOLTZ</div>
+            <div style="font-family:var(--font-display);font-size:1.5rem;letter-spacing:.12em;color:#fff">VANTIX</div>
             <div style="font-size:.55rem;letter-spacing:.3em;color:var(--brand-500)">TECH STORE</div>
           </div>
           <button (click)="menuOpen = false" style="width:36px;height:36px;border-radius:var(--r-lg);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
+
+        <app-customer-menu variant="panel" (done)="menuOpen = false"></app-customer-menu>
 
         <nav style="padding:1rem 1rem;display:flex;flex-direction:column;gap:.25rem">
           <a routerLink="/"             [routerLinkActiveOptions]="{exact:true}" routerLinkActive="mobile-nav-active" (click)="menuOpen=false" class="mobile-nav-link">
@@ -142,7 +148,7 @@ import { CartService } from '../../services/cart.service';
           <div class="grid-4" style="gap:3rem;margin-bottom:3rem">
             <div>
               <div style="margin-bottom:1.25rem">
-                <div style="font-family:var(--font-display);font-size:1.6rem;color:#fff;letter-spacing:.12em">VOLTZ</div>
+                <div style="font-family:var(--font-display);font-size:1.6rem;color:#fff;letter-spacing:.12em">VANTIX</div>
                 <div style="font-size:.55rem;letter-spacing:.3em;color:var(--brand-500)">TECH STORE</div>
               </div>
               <p style="font-size:.82rem;color:rgba(255,255,255,.4);line-height:1.85;margin-bottom:1.25rem">
@@ -184,7 +190,7 @@ import { CartService } from '../../services/cart.service';
           </div>
 
           <div style="border-top:1px solid rgba(255,255,255,.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:rgba(255,255,255,.25)">
-            <p>&copy; 2026 VOLTZ Tech Store. Todos os direitos reservados. Projeto acadêmico, sem vendas reais.</p>
+            <p>&copy; 2026 VANTIX Tech Store. Todos os direitos reservados. Projeto acadêmico, sem vendas reais.</p>
             <p style="display:flex;align-items:center;gap:.5rem"><span class="status-dot online"></span> Sistema operacional</p>
           </div>
         </div>
@@ -227,9 +233,10 @@ import { CartService } from '../../services/cart.service';
       width: 288px;
       background: #0b1428;
       border-right: 1px solid rgba(255,255,255,.07);
-      z-index: 150;
+      z-index: 320; /* acima da faixa "Modo demonstração" (z-index 300) */
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
       transform: translateX(-100%);
       transition: transform .3s cubic-bezier(.4,0,.2,1);
     }
@@ -254,6 +261,7 @@ import { CartService } from '../../services/cart.service';
     @media (max-width: 768px) {
       .desktop-nav { display: none !important; }
       .hamburger-btn { display: flex !important; }
+      .header-customer { display: none !important; }
     }
     @media (max-width: 480px) {
       .grid-4 { grid-template-columns: 1fr 1fr !important; }

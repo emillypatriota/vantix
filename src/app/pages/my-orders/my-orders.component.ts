@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { OrdersService } from '../../services/orders.service';
+import { CustomerService, productIds } from '../../services/customer.service';
+import { AlsoBoughtComponent } from '../../components/ui/also-bought.component';
 import { Order } from '../../models';
 
 const STATUS_STEPS = ['pending','confirmed','preparing','ready','delivering','delivered'];
@@ -20,7 +22,7 @@ const STATUS_CONFIG: Record<string, { label:string; color:string; bg:string; des
 @Component({
   selector: 'app-my-orders',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, DatePipe, FormsModule],
+  imports: [RouterLink, NgFor, NgIf, DatePipe, FormsModule, AlsoBoughtComponent],
   template: `
     <div style="padding:2.5rem 0 4rem;background:var(--stone-50);min-height:60vh">
       <div class="container" style="max-width:740px">
@@ -97,6 +99,13 @@ const STATUS_CONFIG: Record<string, { label:string; color:string; bg:string; des
             </p>
           </div>
         </div>
+
+        <!-- Recomendado com base no histórico de compras -->
+        <app-also-bought *ngIf="historyIds.length"
+                         [productIds]="historyIds"
+                         tag="PERSONALIZADO"
+                         title="Recomendado para você"
+                         subtitle="Com base nas suas compras anteriores"></app-also-bought>
       </div>
     </div>
   `,
@@ -112,24 +121,34 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   loading = false;
   private sub?: Subscription;
 
-  constructor(private ordersService: OrdersService) {}
+  /** Produtos comprados (pedidos não cancelados) da busca atual. */
+  historyIds: string[] = [];
+
+  constructor(private ordersService: OrdersService, private customers: CustomerService) {
+    // Se o cliente se identificar pelo cabeçalho com esta tela aberta, busca os pedidos dele.
+    effect(() => {
+      const phone = this.customers.customer()?.phone;
+      if (phone && phone !== this.phone) { this.phoneInput = phone; this.lookup(); }
+    });
+  }
 
   ngOnInit() {
-    try { this.phoneInput = localStorage.getItem('voltz_customer_phone') ?? ''; } catch { /* ignora */ }
-    if (this.phoneInput) this.lookup();
+    if (!this.phoneInput) this.phoneInput = this.customers.customer()?.phone ?? '';
+    if (this.phoneInput && !this.phone) this.lookup();
   }
 
   ngOnDestroy() { this.sub?.unsubscribe(); }
 
   lookup() {
     const phone = this.phoneInput.trim();
-    if (phone.replace(/D/g, '').length < 10) { this.phone = ''; this.orders = []; return; }
+    if (phone.replace(/\D/g, '').length < 10) { this.phone = ''; this.orders = []; this.historyIds = []; return; }
     this.phone = phone;
     this.loading = true;
     this.sub?.unsubscribe();
     // Atualiza sozinho a cada poucos segundos (polling), como o painel.
     this.sub = this.ordersService.customerOrders(phone).subscribe(list => {
       this.orders = list;
+      this.historyIds = productIds(list);
       this.loading = false;
     });
   }

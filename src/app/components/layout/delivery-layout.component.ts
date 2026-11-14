@@ -31,7 +31,7 @@ import { OrdersService } from '../../services/orders.service';
               font-family:var(--font-display);font-size:1rem;font-weight:700;color:#fff
             ">V</div>
             <div>
-              <div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:.1em;color:var(--text-primary)">VOLTZ</div>
+              <div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:.1em;color:var(--text-primary)">VANTIX</div>
               <div style="font-size:.55rem;letter-spacing:.3em;color:var(--success-text);margin-top:-3px">LOGÍSTICA</div>
             </div>
           </a>
@@ -85,7 +85,7 @@ import { OrdersService } from '../../services/orders.service';
       <!-- Footer minimal -->
       <footer style="padding:1.25rem;text-align:center;border-top:1px solid var(--border)">
         <p style="font-size:var(--text-xs);color:var(--text-tertiary)">
-          VOLTZ Tech Store &copy; 2026 — Portal da Logística
+          VANTIX Tech Store &copy; 2026 — Portal da Logística
         </p>
       </footer>
 

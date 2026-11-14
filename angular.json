@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "voltz-store": {
+    "vantix-store": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/voltz-store",
+            "outputPath": "dist/vantix-store",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -52,8 +52,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": { "buildTarget": "voltz-store:build:production" },
-            "development": { "buildTarget": "voltz-store:build:development" }
+            "production": { "buildTarget": "vantix-store:build:production" },
+            "development": { "buildTarget": "vantix-store:build:development" }
           },
           "defaultConfiguration": "development"
         }
